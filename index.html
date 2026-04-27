@@ -775,8 +775,29 @@
                 this.timeElapsed = 0;
                 this.gameOver = false;
                 this.checkTimer = null;
+                this.timerInterval = null;
                 this.emojis = ['🍕', '🎮', '🚀', '🎨', '🎭', '🎸', '🌟', '⚽'];
                 this.init();
+                this.startTimer();
+            }
+
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    if (!this.gameOver) {
+                        this.timeElapsed = Math.floor((Date.now() - this.timeStart) / 1000);
+                        this.updateHUD();
+                    }
+                }, 1000);
+            }
+
+            updateHUD() {
+                document.getElementById('memoryTime').textContent = this.timeElapsed + 's';
+                document.getElementById('memoryMoves').textContent = this.moves;
+                document.getElementById('memoryMatches').textContent = `${this.matched/2}/8`;
+                
+                // Calculate current potential score
+                const currentScore = Math.max(0, 1000 - (this.moves * 20) - (this.timeElapsed * 5));
+                document.getElementById('memoryScore').textContent = this.matched > 0 ? this.score : currentScore;
             }
 
             init() {
@@ -791,7 +812,7 @@
                     flipped: false,
                     matched: false
                 }));
-                this.render();
+                this.updateHUD();
             }
 
             render() {
@@ -803,12 +824,7 @@
                         ${card.flipped || card.matched ? card.emoji : '?'}
                     </div>
                 `).join('');
-                
-                this.timeElapsed = Math.floor((Date.now() - this.timeStart) / 1000);
-                document.getElementById('memoryTime').textContent = this.timeElapsed + 's';
-                document.getElementById('memoryMoves').textContent = this.moves;
-                document.getElementById('memoryMatches').textContent = `${this.matched}/8`;
-                document.getElementById('memoryScore').textContent = this.score;
+                this.updateHUD();
             }
 
             flipCard(id) {
@@ -825,7 +841,8 @@
                         this.flipped[0].matched = true;
                         this.flipped[1].matched = true;
                         this.matched += 2;
-                        this.score = Math.max(0, 200 - (this.moves * 5) - (this.timeElapsed * 2));
+                        // Award points based on speed and efficiency
+                        this.score += Math.max(10, 100 - (this.moves * 2) - (this.timeElapsed / 2));
                         this.flipped = [];
                         this.render();
 
@@ -856,6 +873,7 @@
 
             reset() {
                 clearTimeout(this.checkTimer);
+                clearInterval(this.timerInterval);
                 this.cards = [];
                 this.flipped = [];
                 this.matched = 0;
@@ -864,6 +882,7 @@
                 this.timeStart = Date.now();
                 this.gameOver = false;
                 this.init();
+                this.startTimer();
             }
         }
 
