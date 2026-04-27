@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 RetroMemory - AI Card Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #ff006e;
+            --color-secondary: #00d4ff;
+            --color-accent: #ffbe0b;
+            --color-success: #33ff00;
+            --color-dark: #1a1a2e;
+            --color-light: #f5f5f5;
+            --color-card-dark: #16213e;
+            --color-card-light: #fffbf0;
+            
+            --font-display: 'Courier New', monospace;
+            --font-body: 'Arial', sans-serif;
+            
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--color-dark);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: var(--color-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .title {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: bold;
+            color: var(--color-accent);
+            text-shadow: 4px 4px 0 rgba(255, 1, 110, 0.5);
+            letter-spacing: 3px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-family: var(--font-display);
+            font-weight: bold;
+            border: 3px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) rotate(-1deg);
+            box-shadow: 0 12px 48px rgba(255, 1, 110, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: var(--color-dark);
+            border-color: var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 12px 48px rgba(0, 212, 255, 0.4);
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            color: var(--color-dark);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(20deg) scale(1.1);
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid var(--color-accent);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-label {
+            font-family: var(--font-display);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-secondary);
+            text-shadow: 2px 2px 0 var(--color-primary);
+        }
+
+        /* Difficulty Selector */
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .difficulty-btn {
+            padding: 12px 20px;
+            border: 3px dashed var(--color-secondary);
+            background: transparent;
+            color: var(--color-secondary);
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .difficulty-btn.active {
+            background: var(--color-success);
+            color: var(--color-dark);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px rgba(51, 255, 0, 0.6);
+            animation: pulse 0.6s ease-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(51, 255, 0, 0.6); }
+            50% { box-shadow: 0 0 40px rgba(51, 255, 0, 0.8); }
+        }
+
+        /* Game Board */
+        .game-board {
+            perspective: 1000px;
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            max-width: 100%;
+        }
+
+        .grid.grid-4x4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid.grid-6x6 {
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .grid.grid-8x8 {
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        @media (max-width: 1024px) {
+            .grid.grid-6x6 {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+            }
+
+            .grid.grid-8x8 {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+            }
+        }
+
+        /* Card Flip Animation */
+        .card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border: 3px solid var(--color-accent);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '?';
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--color-light);
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            background: linear-gradient(135deg, var(--color-success), var(--color-secondary));
+            border-color: var(--color-success);
+            animation: matchPulse 0.6s ease-out;
+            cursor: default;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% { transform: scale(1) rotateY(180deg); }
+            50% { transform: scale(1.1) rotateY(180deg); }
+        }
+
+        .card.matched::before {
+            display: none;
+        }
+
+        .card:hover:not(.flipped):not(.matched) {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(255, 1, 110, 0.5);
+        }
+
+        .card.disabled {
+            cursor: not-allowed;
+        }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            background: rgba(255, 255, 255, 0.15);
+            border: 3px solid var(--color-secondary);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .leaderboard-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .leaderboard-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 212, 255, 0.15);
+            border-left: 5px solid var(--color-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .leaderboard-entry:nth-child(1) {
+            border-left-color: var(--color-accent);
+            background: rgba(255, 190, 11, 0.2);
+        }
+
+        .leaderboard-entry:nth-child(2) {
+            border-left-color: var(--color-secondary);
+        }
+
+        .leaderboard-entry:nth-child(3) {
+            border-left-color: var(--color-primary);
+        }
+
+        .entry-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .entry-rank {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--color-accent);
+            width: 40px;
+        }
+
+        .entry-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .entry-name {
+            font-family: var(--font-display);
+            font-weight: bold;
+            color: var(--color-light);
+        }
+
+        .entry-stats {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .entry-score {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-success);
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(51, 255, 0, 0.2);
+            border: 2px dashed var(--color-success);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: var(--font-display);
+            color: var(--color-success);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .ai-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--color-success);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Game Over Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 4px solid var(--color-accent);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .modal-stats {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .modal-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-stat-label {
+            font-family: var(--font-display);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-secondary);
+        }
+
+        .modal-stat-value {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--color-light);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 40px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+            }
+
+            .grid {
+                gap: 8px;
+            }
+
+            .card {
+                font-size: 28px;
+            }
+
+            .card::before {
+                font-size: 32px;
+            }
+
+            .stat-box {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            header {
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title">🎮 RetroMemory</div>
+            <div class="header-controls">
+                <button class="btn-secondary" onclick="gameManager.resetGame()">🔄 New Game</button>
+                <button class="theme-toggle" onclick="gameManager.toggleTheme()">🌙</button>
+            </div>
+        </header>
+
+        <div class="stats-panel">
+            <div class="stat-box">
+                <div class="stat-label">Time</div>
+                <div class="stat-value"><span id="timer">0:00</span></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Moves</div>
+                <div class="stat-value"><span id="moves">0</span></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Matches</div>
+                <div class="stat-value"><span id="matches">0</span></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Score</div>
+                <div class="stat-value"><span id="score">0</span></div>
+            </div>
+        </div>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn active" onclick="gameManager.setDifficulty('easy')">Easy (4x4)</button>
+            <button class="difficulty-btn" onclick="gameManager.setDifficulty('medium')">Medium (6x6)</button>
+            <button class="difficulty-btn" onclick="gameManager.setDifficulty('hard')">Hard (8x8)</button>
+        </div>
+
+        <div class="ai-indicator">
+            <div class="ai-dot"></div>
+            <span id="ai-status">AI Ready</span>
+        </div>
+
+        <div class="game-board">
+            <div class="grid" id="gameGrid"></div>
+        </div>
+
+        <div class="leaderboard-section">
+            <div class="leaderboard-title">🏆 Leaderboard</div>
+            <div class="leaderboard-list" id="leaderboard"></div>
+        </div>
+
+        <div class="modal" id="gameOverModal">
+            <div class="modal-content">
+                <div class="modal-title" id="modalTitle">You Won!</div>
+                <div class="modal-stats" id="modalStats"></div>
+                <div class="modal-buttons">
+                    <button class="btn-primary" onclick="gameManager.resetGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🎨 Made with retro vibes | Powered by AI 🤖 | Built for fun 🎉</p>
+    </footer>
+
+    <script>
+        // Audio Context Setup
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(frequency, duration) {
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.log('Audio not available');
+            }
+        }
+
+        function playFlipSound() {
+            playSound(800, 0.1);
+        }
+
+        function playMatchSound() {
+            playSound(1200, 0.2);
+        }
+
+        function playWinSound() {
+            playSound(1000, 0.3);
+            setTimeout(() => playSound(1200, 0.3), 150);
+        }
+
+        // Game Manager
+        const gameManager = {
+            cards: [],
+            flipped: [],
+            matched: [],
+            moves: 0,
+            score: 0,
+            difficulty: 'easy',
+            gridSize: 4,
+            gameStarted: false,
+            gamePaused: false,
+            timeStarted: null,
+            timerInterval: null,
+            leaderboard: JSON.parse(localStorage.getItem('memoryLeaderboard')) || [],
+            emojis: ['🍕', '🎮', '🚀', '🎨', '🎭', '🎸', '🌟', '⚽', '🎪', '🦄', '🐢', '🎯', '🎲', '🎪', '🌈', '🎊', '🎈', '🎉', '💎', '👑', '🏆', '🎁', '🌺', '🌸', '🐝', '🦋', '🌻', '🍓', '🍌', '🍉', '🍎', '🍊', '🥝', '🍋', '🥑'],
+
+            init() {
+                this.resetGame();
+                this.loadLeaderboard();
+            },
+
+            setDifficulty(level) {
+                if (this.gameStarted) return;
+                this.difficulty = level;
+                
+                document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+
+                const gridSizes = { easy: 4, medium: 6, hard: 8 };
+                this.gridSize = gridSizes[level];
+                this.resetGame();
+            },
+
+            resetGame() {
+                clearInterval(this.timerInterval);
+                this.flipped = [];
+                this.matched = [];
+                this.moves = 0;
+                this.score = 0;
+                this.gameStarted = false;
+                this.timeStarted = null;
+
+                document.getElementById('timer').textContent = '0:00';
+                document.getElementById('moves').textContent = '0';
+                document.getElementById('matches').textContent = '0';
+                document.getElementById('score').textContent = '0';
+                document.getElementById('gameOverModal').classList.remove('active');
+
+                this.generateCards();
+                this.renderCards();
+                this.updateAIStatus();
+            },
+
+            generateCards() {
+                const totalCards = this.gridSize * this.gridSize;
+                const pairsNeeded = totalCards / 2;
+                const selectedEmojis = this.emojis.slice(0, pairsNeeded);
+                
+                this.cards = [...selectedEmojis, ...selectedEmojis]
+                    .sort(() => Math.random() - 0.5)
+                    .map((emoji, idx) => ({
+                        id: idx,
+                        emoji: emoji,
+                        flipped: false,
+                        matched: false
+                    }));
+            },
+
+            renderCards() {
+                const grid = document.getElementById('gameGrid');
+                grid.innerHTML = '';
+                grid.className = `grid grid-${this.gridSize}x${this.gridSize}`;
+
+                this.cards.forEach(card => {
+                    const cardEl = document.createElement('div');
+                    cardEl.className = 'card' + (card.flipped ? ' flipped' : '') + (card.matched ? ' matched' : '');
+                    cardEl.textContent = card.flipped || card.matched ? card.emoji : '';
+                    cardEl.onclick = () => this.flipCard(card);
+                    grid.appendChild(cardEl);
+                });
+            },
+
+            flipCard(card) {
+                if (!this.gameStarted) {
+                    this.gameStarted = true;
+                    this.timeStarted = Date.now();
+                    this.startTimer();
+                }
+
+                if (card.flipped || card.matched || this.flipped.length >= 2 || this.gamePaused) return;
+
+                card.flipped = true;
+                this.flipped.push(card);
+                playFlipSound();
+                this.renderCards();
+
+                if (this.flipped.length === 2) {
+                    this.gamePaused = true;
+                    this.moves++;
+                    document.getElementById('moves').textContent = this.moves;
+
+                    setTimeout(() => this.checkMatch(), 600);
+                }
+            },
+
+            checkMatch() {
+                const [card1, card2] = this.flipped;
+                const isMatch = card1.emoji === card2.emoji;
+
+                if (isMatch) {
+                    card1.matched = true;
+                    card2.matched = true;
+                    this.matched.push(card1, card2);
+                    playMatchSound();
+                    this.updateScore();
+                    this.updateMatchCount();
+
+                    if (this.matched.length === this.cards.length) {
+                        this.endGame();
+                    }
+                } else {
+                    card1.flipped = false;
+                    card2.flipped = false;
+                }
+
+                this.flipped = [];
+                this.gamePaused = false;
+                this.renderCards();
+                this.adjustDifficultyAI();
+            },
+
+            updateScore() {
+                const baseScore = 100;
+                const movesPenalty = this.moves * 2;
+                this.score = Math.max(0, baseScore - movesPenalty);
+                document.getElementById('score').textContent = this.score;
+            },
+
+            updateMatchCount() {
+                const matchCount = Math.floor(this.matched.length / 2);
+                document.getElementById('matches').textContent = matchCount;
+            },
+
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.timeStarted) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timer').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 100);
+            },
+
+            adjustDifficultyAI() {
+                const totalCards = this.cards.length;
+                const totalPairs = totalCards / 2;
+                const currentMatches = this.matched.length / 2;
+                const progress = currentMatches / totalPairs;
+
+                let aiMessage = '';
+                const accuracy = this.matched.length / (this.moves * 2) * 100;
+
+                if (progress > 0.5 && accuracy > 70) {
+                    aiMessage = '✨ Excellent! Increasing difficulty next game...';
+                    localStorage.setItem('nextDifficulty', 'increase');
+                } else if (progress < 0.3 && accuracy < 50 && this.moves > 5) {
+                    aiMessage = '💪 Keep trying! Easier mode suggested next...';
+                    localStorage.setItem('nextDifficulty', 'decrease');
+                } else {
+                    aiMessage = '🎯 Great pace! You\'re doing well!';
+                }
+
+                document.getElementById('ai-status').textContent = aiMessage;
+            },
+
+            updateAIStatus() {
+                const nextDiff = localStorage.getItem('nextDifficulty');
+                let status = 'AI Ready';
+                if (nextDiff === 'increase' && this.difficulty !== 'hard') {
+                    status = '↗️ AI suggests: Increase difficulty';
+                } else if (nextDiff === 'decrease' && this.difficulty !== 'easy') {
+                    status = '↙️ AI suggests: Reduce difficulty';
+                }
+                document.getElementById('ai-status').textContent = status;
+            },
+
+            endGame() {
+                clearInterval(this.timerInterval);
+                const finalTime = Math.floor((Date.now() - this.timeStarted) / 1000);
+                playWinSound();
+
+                const gameResult = {
+                    name: `Player ${this.leaderboard.length + 1}`,
+                    score: this.score,
+                    moves: this.moves,
+                    time: finalTime,
+                    difficulty: this.difficulty.toUpperCase(),
+                    date: new Date().toLocaleDateString()
+                };
+
+                this.leaderboard.unshift(gameResult);
+                this.leaderboard = this.leaderboard.slice(0, 10);
+                localStorage.setItem('memoryLeaderboard', JSON.stringify(this.leaderboard));
+
+                this.showGameOverModal(finalTime);
+                this.renderLeaderboard();
+            },
+
+            showGameOverModal(finalTime) {
+                const modal = document.getElementById('gameOverModal');
+                const minutes = Math.floor(finalTime / 60);
+                const seconds = finalTime % 60;
+
+                document.getElementById('modalStats').innerHTML = `
+                    <div class="modal-stat">
+                        <div class="modal-stat-label">Score</div>
+                        <div class="modal-stat-value">${this.score}</div>
+                    </div>
+                    <div class="modal-stat">
+                        <div class="modal-stat-label">Moves</div>
+                        <div class="modal-stat-value">${this.moves}</div>
+                    </div>
+                    <div class="modal-stat">
+                        <div class="modal-stat-label">Time</div>
+                        <div class="modal-stat-value">${minutes}:${seconds.toString().padStart(2, '0')}</div>
+                    </div>
+                    <div class="modal-stat">
+                        <div class="modal-stat-label">Difficulty</div>
+                        <div class="modal-stat-value">${this.difficulty.toUpperCase()}</div>
+                    </div>
+                `;
+
+                modal.classList.add('active');
+            },
+
+            renderLeaderboard() {
+                const leaderboard = document.getElementById('leaderboard');
+                leaderboard.innerHTML = this.leaderboard.map((entry, idx) => `
+                    <div class="leaderboard-entry">
+                        <div class="entry-info">
+                            <div class="entry-rank">#${idx + 1}</div>
+                            <div class="entry-details">
+                                <div class="entry-name">${entry.name}</div>
+                                <div class="entry-stats">${entry.difficulty} • ${entry.date}</div>
+                            </div>
+                        </div>
+                        <div class="entry-score">${entry.score}</div>
+                    </div>
+                `).join('');
+            },
+
+            loadLeaderboard() {
+                this.renderLeaderboard();
+            },
+
+            toggleTheme() {
+                document.body.classList.toggle('light-mode');
+                const themeBtn = document.querySelector('.theme-toggle');
+                themeBtn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+                localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+            }
+        };
+
+        // Initialize Game
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.querySelector('.theme-toggle').textContent = '☀️';
+            }
+            gameManager.init();
+        });
+
+        // Prevent right-click on cards (for fair play)
+        document.addEventListener('contextmenu', e => {
+            if (e.target.classList.contains('card')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

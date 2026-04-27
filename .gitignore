@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+chase_master_save.json
+.env
+.DS_Store
+node_modules/
+dist/
