@@ -791,13 +791,18 @@
             }
 
             updateHUD() {
-                document.getElementById('memoryTime').textContent = this.timeElapsed + 's';
-                document.getElementById('memoryMoves').textContent = this.moves;
-                document.getElementById('memoryMatches').textContent = `${this.matched/2}/8`;
+                const timeEl = document.getElementById('memoryTime');
+                const movesEl = document.getElementById('memoryMoves');
+                const matchesEl = document.getElementById('memoryMatches');
+                const scoreEl = document.getElementById('memoryScore');
                 
-                // Calculate current potential score
+                if (timeEl) timeEl.textContent = this.timeElapsed + 's';
+                if (movesEl) movesEl.textContent = this.moves;
+                if (matchesEl) matchesEl.textContent = `${Math.floor(this.matched/2)}/8`;
+                
+                // Calculate current potential score if no matches yet, otherwise show current score
                 const currentScore = Math.max(0, 1000 - (this.moves * 20) - (this.timeElapsed * 5));
-                document.getElementById('memoryScore').textContent = this.matched > 0 ? this.score : currentScore;
+                if (scoreEl) scoreEl.textContent = Math.floor(this.score || currentScore);
             }
 
             init() {
@@ -812,7 +817,7 @@
                     flipped: false,
                     matched: false
                 }));
-                this.updateHUD();
+                this.render();
             }
 
             render() {

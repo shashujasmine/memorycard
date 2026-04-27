@@ -411,8 +411,14 @@ class GameManager:
             try:
                 with open(SAVE_FILE, 'r') as f:
                     data = json.load(f)
+                    # Convert dict to PlayerStats
+                    achievements_data = data.pop('achievements', [])
                     self.stats = PlayerStats(**data)
-            except:
+                    # Reconstruct achievement objects
+                    for ach_dict in achievements_data:
+                        self.stats.achievements.append(Achievement(**ach_dict))
+            except Exception as e:
+                print(f"Error loading stats: {e}")
                 self.stats = PlayerStats()
         else:
             self.stats = PlayerStats()
