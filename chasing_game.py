@@ -1,7 +1,4 @@
-"""
-2D Chasing Game - Avoid Enemy, Collect Coins, Survive!
-Built with Pygame | Features: Difficulty scaling, Power-ups, Score tracking
-"""
+
 
 import pygame
 import random
@@ -11,16 +8,16 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import List, Tuple
 
-# Initialize Pygame
+
 pygame.init()
 
-# ==================== CONSTANTS ====================
+
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 FPS = 60
 GAME_TITLE = "Chase Master - Avoid & Survive!"
 
-# Colors
+
 class Colors(Enum):
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
@@ -34,17 +31,17 @@ class Colors(Enum):
     DARK_GRAY = (30, 30, 30)
     LIGHT_GRAY = (150, 150, 150)
 
-# Game States
+
 class GameState(Enum):
     MENU = 1
     PLAYING = 2
     GAME_OVER = 3
     PAUSED = 4
 
-# ==================== DATA CLASSES ====================
+
 @dataclass
 class Vector2:
-    """Simple 2D vector class"""
+
     x: float
     y: float
     
@@ -60,9 +57,8 @@ class Vector2:
     def magnitude(self) -> float:
         return math.sqrt(self.x ** 2 + self.y ** 2)
 
-# ==================== GAME OBJECTS ====================
+
 class Player:
-    """Player character - controllable by arrow keys"""
     def __init__(self, x: float, y: float):
         self.pos = Vector2(x, y)
         self.radius = 15
@@ -76,7 +72,7 @@ class Player:
         self.health = 1
     
     def handle_input(self, keys):
-        """Handle player movement"""
+    
         self.velocity = Vector2(0, 0)
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.velocity.y = -self.speed
@@ -88,37 +84,37 @@ class Player:
             self.velocity.x = self.speed
     
     def update(self):
-        """Update player position and shield status"""
+
         self.pos.x += self.velocity.x
         self.pos.y += self.velocity.y
         
-        # Boundary checking
+        
         self.pos.x = max(self.radius, min(SCREEN_WIDTH - self.radius, self.pos.x))
         self.pos.y = max(self.radius, min(SCREEN_HEIGHT - self.radius, self.pos.y))
         
-        # Update shield
+        
         if self.has_shield:
             self.shield_time -= 1
             if self.shield_time <= 0:
                 self.has_shield = False
     
     def activate_shield(self, duration: int = 300):
-        """Activate protective shield"""
+
         self.has_shield = True
         self.shield_time = duration
     
     def draw(self, surface: pygame.Surface):
-        """Draw player and shield if active"""
+        
         pygame.draw.circle(surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius)
         pygame.draw.circle(surface, Colors.LIGHT_GRAY.value, (int(self.pos.x), int(self.pos.y)), self.radius, 2)
         
-        # Draw shield
+
         if self.has_shield:
             shield_radius = self.radius + 8
             pygame.draw.circle(surface, self.shield_color, (int(self.pos.x), int(self.pos.y)), shield_radius, 3)
 
 class Enemy:
-    """AI Enemy - chases the player"""
+
     def __init__(self, x: float, y: float):
         self.pos = Vector2(x, y)
         self.radius = 12
@@ -127,36 +123,35 @@ class Enemy:
         self.target_player = None
     
     def update(self, player: Player):
-        """Chase player with AI logic"""
+
         self.target_player = player
         
-        # Calculate direction to player
+
         direction = Vector2(
             player.pos.x - self.pos.x,
             player.pos.y - self.pos.y
         )
         direction = direction.normalize()
         
-        # Move towards player
+    
         self.pos.x += direction.x * self.speed
         self.pos.y += direction.y * self.speed
-        
-        # Boundary checking
+
         self.pos.x = max(self.radius, min(SCREEN_WIDTH - self.radius, self.pos.x))
         self.pos.y = max(self.radius, min(SCREEN_HEIGHT - self.radius, self.pos.y))
     
     def draw(self, surface: pygame.Surface):
-        """Draw enemy"""
+
         pygame.draw.circle(surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius)
         pygame.draw.circle(surface, Colors.YELLOW.value, (int(self.pos.x), int(self.pos.y)), self.radius, 2)
         
-        # Draw "eyes" to show it's chasing
+
         eye_offset = 5
         pygame.draw.circle(surface, Colors.WHITE.value, (int(self.pos.x - eye_offset), int(self.pos.y - 3)), 2)
         pygame.draw.circle(surface, Colors.WHITE.value, (int(self.pos.x + eye_offset), int(self.pos.y - 3)), 2)
 
 class Coin:
-    """Collectible coin for points"""
+
     def __init__(self, x: float, y: float):
         self.pos = Vector2(x, y)
         self.radius = 6
@@ -165,20 +160,20 @@ class Coin:
         self.value = 10
     
     def update(self):
-        """Animate coin rotation"""
+
         self.rotation = (self.rotation + 5) % 360
     
     def draw(self, surface: pygame.Surface):
-        """Draw coin as rotating rectangle"""
+
         pygame.draw.circle(surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius)
         pygame.draw.circle(surface, Colors.ORANGE.value, (int(self.pos.x), int(self.pos.y)), self.radius, 2)
 
 class PowerUp:
-    """Power-up items that give temporary bonuses"""
+
     def __init__(self, x: float, y: float, power_type: str):
         self.pos = Vector2(x, y)
         self.radius = 8
-        self.power_type = power_type  # 'shield', 'speed', 'slow_enemy'
+        self.power_type = power_type 
         self.color_map = {
             'shield': Colors.CYAN.value,
             'speed': Colors.GREEN.value,
@@ -188,11 +183,11 @@ class PowerUp:
         self.pulse = 0
     
     def update(self):
-        """Animate pulse effect"""
+
         self.pulse = (self.pulse + 2) % 360
     
     def draw(self, surface: pygame.Surface):
-        """Draw power-up with pulsing effect"""
+
         pulse_size = 2 + math.sin(self.pulse * 0.05) * 2
         pygame.draw.rect(
             surface,
@@ -209,7 +204,7 @@ class PowerUp:
         )
 
 class GameManager:
-    """Manages overall game state and logic"""
+
     def __init__(self):
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
@@ -223,7 +218,7 @@ class GameManager:
         self.reset_game()
     
     def reset_game(self):
-        """Reset game to initial state"""
+
         self.player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.enemies: List[Enemy] = [Enemy(random.randint(50, SCREEN_WIDTH - 50), 
                                            random.randint(50, SCREEN_HEIGHT - 50))]
@@ -235,27 +230,27 @@ class GameManager:
         self.time_alive = 0
         self.coins_collected = 0
         
-        # Difficulty parameters
+
         self.enemy_speed_multiplier = 1.0
         self.spawn_timer = 0
-        self.spawn_interval = 300  # Spawn new enemy every 5 seconds
+        self.spawn_interval = 300 
         self.enemy_spawn_chance = 0.1
         
-        # Spawn initial coins
+
         self.spawn_coins(5)
         
         self.state = GameState.PLAYING
     
     def spawn_coins(self, count: int = 1):
-        """Spawn coins at random positions"""
+
         for _ in range(count):
             x = random.randint(50, SCREEN_WIDTH - 50)
             y = random.randint(50, SCREEN_HEIGHT - 50)
             self.coins.append(Coin(x, y))
     
     def spawn_power_up(self):
-        """Spawn random power-up"""
-        if random.random() < 0.3:  # 30% chance
+
+        if random.random() < 0.3: 
             x = random.randint(50, SCREEN_WIDTH - 50)
             y = random.randint(50, SCREEN_HEIGHT - 50)
             power_type = random.choice(['shield', 'speed', 'slow_enemy'])
@@ -263,12 +258,12 @@ class GameManager:
     
     def check_collision(self, obj1_pos: Vector2, obj1_radius: float, 
                        obj2_pos: Vector2, obj2_radius: float) -> bool:
-        """Check if two circular objects collide"""
+
         distance = obj1_pos.distance_to(obj2_pos)
         return distance < (obj1_radius + obj2_radius)
     
     def handle_input(self):
-        """Handle all input"""
+
         keys = pygame.key.get_pressed()
         self.player.handle_input(keys)
         
@@ -289,11 +284,11 @@ class GameManager:
         return True
     
     def update(self):
-        """Update game state"""
+
         if self.state != GameState.PLAYING:
             return
         
-        # Update entities
+
         self.player.update()
         
         for enemy in self.enemies:
@@ -305,11 +300,11 @@ class GameManager:
         for power_up in self.power_ups:
             power_up.update()
         
-        # Increase time alive (score per second)
+
         self.time_alive += 1
-        self.score += 0.05  # Gain score over time
+        self.score += 0.05  
         
-        # Check coin collection
+
         for coin in self.coins[:]:
             if self.check_collision(self.player.pos, self.player.radius, 
                                    coin.pos, coin.radius):
@@ -317,22 +312,21 @@ class GameManager:
                 self.coins.remove(coin)
                 self.coins_collected += 1
                 
-                # Spawn new coin randomly
+
                 if random.random() < 0.7:
                     self.spawn_coins(1)
                 
-                # Chance to spawn power-up
                 if random.random() < 0.2:
                     self.spawn_power_up()
         
-        # Check power-up collection
+
         for power_up in self.power_ups[:]:
             if self.check_collision(self.player.pos, self.player.radius,
                                    power_up.pos, power_up.radius):
                 self.apply_power_up(power_up)
                 self.power_ups.remove(power_up)
         
-        # Check collision with enemies
+
         for enemy in self.enemies:
             if self.check_collision(self.player.pos, self.player.radius,
                                    enemy.pos, enemy.radius):

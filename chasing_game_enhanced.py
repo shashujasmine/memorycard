@@ -11,18 +11,18 @@ from dataclasses import dataclass, field
 from typing import List, Tuple
 from pathlib import Path
 
-# Initialize Pygame
+
 pygame.init()
 pygame.mixer.init()
 
-# ==================== CONSTANTS ====================
+
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 800
 FPS = 60
 GAME_TITLE = "Chase Master - Enhanced Edition!"
 SAVE_FILE = "chase_master_save.json"
 
-# Colors
+
 class Colors(Enum):
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
@@ -38,7 +38,7 @@ class Colors(Enum):
     PINK = (255, 100, 200)
     DARK_RED = (139, 0, 0)
 
-# Game States
+
 class GameState(Enum):
     MENU = 1
     MODE_SELECT = 2
@@ -46,44 +46,43 @@ class GameState(Enum):
     GAME_OVER = 4
     PAUSED = 5
 
-# Game Modes
+
 class GameMode(Enum):
     SURVIVAL = "Survival"
     TIME_ATTACK = "Time Attack (60s)"
     ENDLESS_COINS = "Endless Coins"
 
-# Enemy Types
+
 class EnemyType(Enum):
     TRACKER = "Tracker"
     TANK = "Tank"
     GHOST = "Ghost"
     BOUNCER = "Bouncer"
 
-# ==================== SOUND EFFECTS ====================
+
 class SoundManager:
-    """Manages game audio using procedural sound generation"""
+    
     def __init__(self):
         self.sounds = {}
         self.create_sounds()
     
     def create_sounds(self):
-        """Create sounds using pygame mixer"""
+
         try:
-            # Coin sound - high pitched beep
+        
             self.sounds['coin'] = self.generate_beep(800, 100)
-            # Power-up sound - ascending notes
+
             self.sounds['powerup'] = self.generate_beep(1000, 150)
-            # Hit sound - low beep
+
             self.sounds['hit'] = self.generate_beep(300, 100)
-            # Game over - descending note
+
             self.sounds['gameover'] = self.generate_beep(400, 300)
-            # Shield activation
+
             self.sounds['shield'] = self.generate_beep(1200, 50)
         except:
             print("Sound initialization skipped (audio unavailable)")
     
     def generate_beep(self, frequency: int, duration: int) -> pygame.mixer.Sound:
-        """Generate a simple beep sound"""
         try:
             sample_rate = 22050
             frames = int(sample_rate * duration / 1000)
@@ -95,14 +94,14 @@ class SoundManager:
             return None
     
     def play(self, sound_name: str):
-        """Play a sound"""
+
         try:
             if sound_name in self.sounds and self.sounds[sound_name]:
                 self.sounds[sound_name].play()
         except:
             pass
 
-# Try to use sound manager
+
 try:
     sound_manager = SoundManager()
 except:
@@ -110,7 +109,7 @@ except:
         def play(self, name): pass
     sound_manager = DummySoundManager()
 
-# ==================== DATA CLASSES ====================
+
 @dataclass
 class Vector2:
     """Simple 2D vector class"""
