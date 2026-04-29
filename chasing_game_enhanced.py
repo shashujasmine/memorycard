@@ -1,7 +1,4 @@
-"""
-2D Chasing Game - Enhanced Edition
-Features: Sound Effects, Multiple Enemies, Power-ups, Game Modes, Achievements
-"""
+
 
 import pygame
 import random
@@ -411,12 +408,16 @@ class GameManager:
             try:
                 with open(SAVE_FILE, 'r') as f:
                     data = json.load(f)
-                    # Convert dict to PlayerStats
-                    achievements_data = data.pop('achievements', [])
+                    # Create stats object
+                    achs_data = data.pop('achievements', [])
                     self.stats = PlayerStats(**data)
-                    # Reconstruct achievement objects
-                    for ach_dict in achievements_data:
-                        self.stats.achievements.append(Achievement(**ach_dict))
+                    # Reconstruct objects from dicts
+                    self.stats.achievements = []
+                    for a in achs_data:
+                        if isinstance(a, dict):
+                            self.stats.achievements.append(Achievement(**a))
+                        else:
+                            self.stats.achievements.append(a)
             except Exception as e:
                 print(f"Error loading stats: {e}")
                 self.stats = PlayerStats()
@@ -436,11 +437,14 @@ class GameManager:
             Achievement("powerup_hoarder", "Power-up Hoarder", "Collect 10 power-ups"),
         ]
         
-        # Map existing achievements
+        # Map existing achievements safely
         for ach in achievements:
-            existing = next((a for a in self.stats.achievements if a.id == ach.id), None)
-            if existing:
-                ach.unlocked = existing.unlocked
+            for existing in self.stats.achievements:
+                # Handle both object and dict if something went wrong
+                existing_id = existing.id if not isinstance(existing, dict) else existing.get('id')
+                if existing_id == ach.id:
+                    ach.unlocked = existing.unlocked if not isinstance(existing, dict) else existing.get('unlocked', False)
+                    break
         
         self.stats.achievements = achievements
     

@@ -3,1099 +3,825 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 Game Platform Hub - Multi-Game Dashboard</title>
+    <title>Nexus Games | Ultimate Arcade Hub</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #050510;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(15, 15, 35, 0.7);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #FF006E;
-            --secondary: #00D4FF;
-            --accent: #FFBE0B;
-            --success: #33FF00;
-            --dark: #0A0E27;
-            --light: #F5F5F5;
-            --warning: #FF6B6B;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--dark);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
             min-height: 100vh;
-            padding: 10px;
-            transition: all 0.3s ease;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Navigation */
-        nav {
+        /* Glassmorphism Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 30px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 3px solid var(--secondary);
-            flex-wrap: wrap;
-            gap: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
         }
 
-        nav .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--secondary);
-            letter-spacing: 2px;
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            font-family: 'Outfit', sans-serif;
         }
 
-        nav .nav-links {
+        .nav-links {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 2rem;
+            list-style: none;
         }
 
-        nav button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: 2px solid var(--accent);
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            transition: all 0.3s;
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            font-size: 0.95rem;
         }
 
-        nav button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--primary);
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
         }
 
-        nav button.active {
-            background: var(--secondary);
-            color: var(--dark);
-        }
-
-        /* Main Content */
-        .content {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid var(--accent);
-            border-radius: 10px;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        .sidebar-item {
-            padding: 12px;
-            margin-bottom: 10px;
-            background: rgba(255, 1, 110, 0.2);
-            border-left: 4px solid var(--primary);
-            cursor: pointer;
-            border-radius: 5px;
-            color: var(--light);
-            transition: all 0.3s;
+        /* Hero Section */
+        .hero {
+            padding: 180px 5% 80px;
             text-align: center;
-            font-weight: bold;
-        }
-
-        .sidebar-item:hover {
-            background: rgba(255, 1, 110, 0.4);
-            transform: translateX(5px);
-        }
-
-        .sidebar-item.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Main Panel */
-        .main-panel {
-            background: rgba(0, 0, 0, 0.9);
-            border: 3px solid var(--secondary);
-            border-radius: 10px;
-            padding: 30px;
-            color: var(--light);
-        }
-
-        .panel {
-            display: none;
-        }
-
-        .panel.active {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Dashboard */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            border: 2px solid var(--secondary);
-        }
-
-        .stat-label {
-            color: var(--dark);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px var(--primary);
-        }
-
-        /* Games Grid */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .game-card {
-            background: rgba(0, 212, 255, 0.1);
-            border: 3px dashed var(--secondary);
-            border-radius: 10px;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 212, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
-        }
-
-        .game-card h3 {
-            font-size: 28px;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-
-        .game-card p {
-            color: var(--light);
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .play-btn {
-            padding: 12px 30px;
-            background: var(--success);
-            color: var(--dark);
-            border: 2px solid var(--primary);
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--success);
-        }
-
-        /* Game Canvas Container */
-        #gameContainer {
-            background: var(--dark);
-            border: 3px solid var(--accent);
-            border-radius: 10px;
-            padding: 20px;
-            position: relative;
-        }
-
-        canvas {
-            display: block;
+            max-width: 1000px;
             margin: 0 auto;
-            border: 2px solid var(--secondary);
-            border-radius: 5px;
-            max-width: 100%;
-            height: auto;
         }
 
-        /* Memory Game Container */
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-top: 20px;
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #fff 30%, var(--text-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        .memory-card {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: 3px solid var(--accent);
-            border-radius: 8px;
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 36px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Game Grid */
+        .section-title {
+            padding: 0 5%;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            padding: 0 5% 100px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-preview {
+            height: 220px;
+            background: linear-gradient(45deg, #1e1e3e, #0f0f2d);
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            user-select: none;
+            overflow: hidden;
         }
 
-        .memory-card:hover {
-            transform: scale(1.05);
+        .game-preview::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            opacity: 0.2;
+            transition: opacity 0.3s;
         }
 
-        .memory-card.flipped {
-            background: linear-gradient(135deg, var(--secondary), var(--success));
+        .game-card:hover .game-preview::before {
+            opacity: 0.5;
         }
 
-        .memory-card.matched {
-            background: linear-gradient(135deg, var(--success), var(--accent));
-            cursor: default;
+        .game-icon {
+            font-size: 5rem;
+            z-index: 1;
+            transition: transform 0.5s;
         }
 
-        /* Achievements */
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .game-card:hover .game-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        .achievement {
-            background: rgba(255, 190, 11, 0.1);
-            border: 2px solid var(--accent);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
+        .game-info {
+            padding: 2rem;
         }
 
-        .achievement.unlocked {
-            background: rgba(51, 255, 0, 0.2);
-            border-color: var(--success);
-            box-shadow: 0 0 15px var(--success);
+        .game-tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
 
-        .achievement-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
+        .game-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-family: 'Outfit', sans-serif;
         }
 
-        .achievement-title {
-            font-weight: bold;
-            color: var(--secondary);
-            margin-bottom: 5px;
+        .game-info p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
 
-        .achievement-desc {
-            font-size: 12px;
-            color: var(--light);
-        }
-
-        /* Leaderboard */
-        .leaderboard {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .leaderboard-entry {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 212, 255, 0.1);
-            border-left: 5px solid var(--secondary);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-
-        .leaderboard-entry:nth-child(1) { border-left-color: var(--accent); }
-        .leaderboard-entry:nth-child(2) { border-left-color: var(--secondary); }
-        .leaderboard-entry:nth-child(3) { border-left-color: var(--primary); }
-
-        .entry-rank {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--accent);
-            min-width: 40px;
-        }
-
-        .entry-info {
-            flex: 1;
-            margin-left: 15px;
-        }
-
-        .entry-score {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--success);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
+        /* Modal Overlay */
+        #modalOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
-        .modal.active {
+        #modalOverlay.active {
             display: flex;
+            opacity: 1;
         }
 
-        .modal-content {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: 4px solid var(--accent);
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 500px;
-            text-align: center;
-            animation: popIn 0.3s ease;
+        .game-viewport {
+            width: 90%;
+            max-width: 1000px;
+            height: 80vh;
+            background: #000;
+            border-radius: 32px;
+            border: 2px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(99, 102, 241, 0.2);
         }
 
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-title {
-            font-size: 36px;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .modal-buttons {
+        .close-modal {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 50%;
             display: flex;
-            gap: 15px;
+            align-items: center;
             justify-content: center;
-            margin-top: 25px;
-        }
-
-        .modal-btn {
-            padding: 12px 25px;
-            border: 2px solid white;
-            background: var(--dark);
-            color: white;
-            border-radius: 5px;
             cursor: pointer;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
+            color: white;
+            font-size: 1.5rem;
             transition: all 0.3s;
+            z-index: 2001;
         }
 
-        .modal-btn:hover {
-            background: white;
-            color: var(--dark);
+        .close-modal:hover {
+            background: var(--secondary);
+            transform: rotate(90deg);
         }
 
-        /* Instructions */
-        .instructions {
-            background: rgba(51, 255, 0, 0.1);
-            border: 2px solid var(--success);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-            line-height: 1.6;
+        /* Canvas Game UI */
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
-        .instructions h4 {
-            color: var(--success);
-            margin-bottom: 10px;
+        .game-hud {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            z-index: 10;
         }
 
+        .hud-stat {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.75rem 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+        }
+
+        .hud-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .hud-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .stamina-container {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #staminaBar {
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Stats Dashboard */
+        .stats-section {
+            padding: 50px 5%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-box h4 {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .stat-box .value {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                display: none;
-            }
-
-            nav {
-                flex-direction: column;
-            }
-
-            .memory-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3rem; }
+            .games-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Navigation -->
-        <nav>
-            <div class="logo">🎮 GAME PLATFORM HUB</div>
-            <div class="nav-links">
-                <button onclick="showPanel('dashboard')" class="nav-btn active">Dashboard</button>
-                <button onclick="showPanel('games')" class="nav-btn">Games</button>
-                <button onclick="showPanel('stats')" class="nav-btn">Stats</button>
-                <button onclick="showPanel('achievements')" class="nav-btn">Achievements</button>
+
+    <header>
+        <div class="logo">NEXUS.GAMES</div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Explore</a></li>
+            <li><a href="#">Tournaments</a></li>
+            <li><a href="#">Vault</a></li>
+            <li><a href="#">Rankings</a></li>
+        </ul>
+        <button class="btn btn-secondary" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Connect Wallet</button>
+    </header>
+
+    <main>
+        <section class="hero fade-in">
+            <div class="game-tag" style="margin-bottom: 1.5rem;">V2.0 Launch</div>
+            <h1>The Future of <span style="color: var(--primary);">Retro</span> Gaming</h1>
+            <p>Experience ultra-polished arcade classics reimagined for the modern web. Stunning visuals, advanced AI, and persistent progression.</p>
+            <div class="cta-group">
+                <button class="btn btn-primary" onclick="openGame('chasing')">Play Now — Free</button>
+                <button class="btn btn-secondary">Join Community</button>
             </div>
-        </nav>
+        </section>
 
-        <!-- Main Content -->
-        <div class="content">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-item" onclick="showGame('memory')">🧠 Memory Game</div>
-                <div class="sidebar-item" onclick="showGame('chasing')">🏃 Chasing Game</div>
-                <div class="sidebar-item" onclick="showPanel('stats')">📊 Stats</div>
-                <div class="sidebar-item" onclick="showPanel('achievements')">🏆 Achievements</div>
-                <div class="sidebar-item" onclick="resetData()" style="border-color: var(--warning); color: var(--warning);">⚠️ Reset Data</div>
+        <section class="section-title fade-in">
+            Featured Experiences
+        </section>
+
+        <div class="games-grid">
+            <!-- Chase Master Card -->
+            <div class="game-card fade-in" style="animation-delay: 0.1s">
+                <div class="game-preview">
+                    <div class="game-icon">🏃</div>
+                </div>
+                <div class="game-info">
+                    <span class="game-tag">Action • Survival</span>
+                    <h3>Chase Master Elite</h3>
+                    <p>Escape tactical enemies with advanced vision mechanics. Features stealth, sprinting, and dynamic difficulty.</p>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="openGame('chasing')">Enter Arena</button>
+                </div>
             </div>
 
-            <!-- Main Panel -->
-            <div class="main-panel">
-                <!-- Dashboard Panel -->
-                <div id="dashboard" class="panel active">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px; font-size: 28px;">📊 DASHBOARD</h2>
-                    <div class="dashboard-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Player Level</div>
-                            <div class="stat-value" id="playerLevel">1</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Total Score</div>
-                            <div class="stat-value" id="totalScore">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Games Played</div>
-                            <div class="stat-value" id="gamesPlayed">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Achievements</div>
-                            <div class="stat-value" id="achievements">0/5</div>
-                        </div>
-                    </div>
-
-                    <h3 style="color: var(--accent); margin-bottom: 15px; margin-top: 30px;">Quick Play</h3>
-                    <div class="games-grid">
-                        <div class="game-card">
-                            <h3>🧠 Memory Card</h3>
-                            <p>Match pairs of emoji cards and test your memory!</p>
-                            <button class="play-btn" onclick="startGame('memory')">▶️ PLAY</button>
-                        </div>
-                        <div class="game-card">
-                            <h3>🏃 Chasing Game</h3>
-                            <p>Avoid the enemy and collect coins for points!</p>
-                            <button class="play-btn" onclick="startGame('chasing')">▶️ PLAY</button>
-                        </div>
-                    </div>
+            <!-- Memory Card Card -->
+            <div class="game-card fade-in" style="animation-delay: 0.2s">
+                <div class="game-preview">
+                    <div class="game-icon">🧠</div>
                 </div>
-
-                <!-- Games Panel -->
-                <div id="games" class="panel">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px; font-size: 28px;">🎮 SELECT A GAME</h2>
-                    <div class="games-grid">
-                        <div class="game-card">
-                            <h3>🧠 Memory Card</h3>
-                            <p>Classic memory game. Flip cards and find matching pairs!</p>
-                            <button class="play-btn" onclick="startGame('memory')">▶️ PLAY</button>
-                        </div>
-                        <div class="game-card">
-                            <h3>🏃 Chasing Game</h3>
-                            <p>Action game. Dodge the red enemy and collect yellow coins!</p>
-                            <button class="play-btn" onclick="startGame('chasing')">▶️ PLAY</button>
-                        </div>
-                    </div>
+                <div class="game-info">
+                    <span class="game-tag">Puzzle • Speed</span>
+                    <h3>Memory Matrix</h3>
+                    <p>A neuro-visual memory challenge. Match holographic tiles before the clock expires. High scores get NFTs.</p>
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="alert('Memory Matrix is being optimized for your browser!')">Coming Soon</button>
                 </div>
+            </div>
 
-                <!-- Memory Game Panel -->
-                <div id="memoryGame" class="panel">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: var(--secondary); font-size: 28px;">🧠 MEMORY CARD GAME</h2>
-                        <button class="play-btn" onclick="resetMemoryGame()">🔄 RESTART</button>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                        <div style="background: rgba(51, 255, 0, 0.2); padding: 10px; border-radius: 5px; border: 2px solid var(--success);">
-                            <div style="font-size: 12px; color: var(--success);">MOVES</div>
-                            <div style="font-size: 24px; font-weight: bold; color: var(--accent);" id="memoryMoves">0</div>
-                        </div>
-                        <div style="background: rgba(0, 212, 255, 0.2); padding: 10px; border-radius: 5px; border: 2px solid var(--secondary);">
-                            <div style="font-size: 12px; color: var(--secondary);">MATCHES</div>
-                            <div style="font-size: 24px; font-weight: bold; color: var(--secondary);" id="memoryMatches">0/8</div>
-                        </div>
-                        <div style="background: rgba(255, 1, 110, 0.2); padding: 10px; border-radius: 5px; border: 2px solid var(--primary);">
-                            <div style="font-size: 12px; color: var(--primary);">TIME</div>
-                            <div style="font-size: 24px; font-weight: bold; color: var(--accent);" id="memoryTime">0s</div>
-                        </div>
-                        <div style="background: rgba(255, 190, 11, 0.2); padding: 10px; border-radius: 5px; border: 2px solid var(--accent);">
-                            <div style="font-size: 12px; color: var(--accent);">SCORE</div>
-                            <div style="font-size: 24px; font-weight: bold; color: var(--success);" id="memoryScore">0</div>
-                        </div>
-                    </div>
-                    <div class="memory-grid" id="memoryGrid"></div>
+            <!-- Lilliput Card -->
+            <div class="game-card fade-in" style="animation-delay: 0.3s">
+                <div class="game-preview">
+                    <div class="game-icon">🌳</div>
                 </div>
-
-                <!-- Chasing Game Panel -->
-                <div id="chasingGame" class="panel">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: var(--secondary); font-size: 28px;">🏃 CHASING GAME</h2>
-                        <button class="play-btn" onclick="resetChasingGame()">🔄 RESTART</button>
-                    </div>
-                    <div id="gameContainer">
-                        <canvas id="gameCanvas" width="800" height="500"></canvas>
-                    </div>
-                    <div class="instructions">
-                        <h4>⌨️ Controls:</h4>
-                        Arrow Keys or WASD to move | ESC to back to menu
-                    </div>
-                </div>
-
-                <!-- Stats Panel -->
-                <div id="stats" class="panel">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px; font-size: 28px;">📊 STATISTICS</h2>
-                    <div class="dashboard-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Memory High</div>
-                            <div class="stat-value" id="memoryHigh">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Chasing High</div>
-                            <div class="stat-value" id="chasingHigh">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Total Playtime</div>
-                            <div class="stat-value" id="playtime">0h</div>
-                        </div>
-                    </div>
-
-                    <h3 style="color: var(--accent); margin-top: 30px; margin-bottom: 20px;">🏆 LEADERBOARD</h3>
-                    <div class="leaderboard" id="leaderboard"></div>
-                </div>
-
-                <!-- Achievements Panel -->
-                <div id="achievements" class="panel">
-                    <h2 style="color: var(--secondary); margin-bottom: 20px; font-size: 28px;">🏆 ACHIEVEMENTS</h2>
-                    <div class="achievements-grid" id="achievementsGrid"></div>
+                <div class="game-info">
+                    <span class="game-tag">Exploration • RPG</span>
+                    <h3>Lilliput World</h3>
+                    <p>Explore a miniature fantasy realm. Collect artifacts and avoid the Guardians. The ultimate open-world mini-game.</p>
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: center;">Visit World</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Game Over Modal -->
-    <div id="gameOverModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title" id="modalTitle">Game Over!</div>
-            <div style="font-size: 20px; color: white; margin-bottom: 20px;">
-                <p>Score: <span id="modalScore" style="color: var(--success);">0</span></p>
+        <section class="section-title fade-in">
+            Global Statistics
+        </section>
+
+        <section class="stats-section fade-in">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h4>Total Runs</h4>
+                    <div class="value">12.8k</div>
+                </div>
+                <div class="stat-box">
+                    <h4>Active Players</h4>
+                    <div class="value">456</div>
+                </div>
+                <div class="stat-box">
+                    <h4>World Record</h4>
+                    <div class="value">45,902</div>
+                </div>
             </div>
-            <div class="modal-buttons">
-                <button class="modal-btn" onclick="closeGameOverModal()">Back to Menu</button>
+        </section>
+    </main>
+
+    <!-- Game Modal -->
+    <div id="modalOverlay">
+        <div class="close-modal" onclick="closeGame()">&times;</div>
+        <div class="game-viewport">
+            <div class="game-hud">
+                <div class="hud-stat">
+                    <div class="hud-label">Score</div>
+                    <div class="hud-value" id="hudScore">0000</div>
+                </div>
+                <div class="hud-stat">
+                    <div class="hud-label">Health</div>
+                    <div class="hud-value" id="hudHealth" style="color: var(--secondary);">100%</div>
+                </div>
             </div>
+            
+            <div class="stamina-container">
+                <div id="staminaBar"></div>
+            </div>
+
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- Instructions Overlay (Game Start) -->
+             <div id="startScreen" style="position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20;">
+                <h2 style="font-size: 3rem; margin-bottom: 1rem;">CHASE MASTER</h2>
+                <p style="color: var(--text-dim); margin-bottom: 2rem;">Move: WASD | Sprint: SHIFT | Hide: Trees</p>
+                <button class="btn btn-primary" onclick="startGame()">Start Simulation</button>
+             </div>
         </div>
     </div>
 
     <script>
-        // Platform Data Manager
-        class PlatformData {
-            constructor() {
-                this.data = this.load();
-            }
-
-            load() {
-                const saved = localStorage.getItem('gamePlatformData');
-                return saved ? JSON.parse(saved) : {
-                    playerLevel: 1,
-                    totalScore: 0,
-                    gamesPlayed: 0,
-                    memoryStats: { high: 0, played: 0 },
-                    chasingStats: { high: 0, played: 0 },
-                    leaderboard: [],
-                    achievements: [
-                        { id: 'memory_master', name: 'Memory Master', desc: 'Score 300+ in Memory', icon: '🧠', unlocked: false },
-                        { id: 'chasing_survivor', name: 'Survivor', desc: 'Survive 20s in Chasing', icon: '🏃', unlocked: false },
-                        { id: 'coin_collector', name: 'Coin Collector', desc: 'Collect 30 coins', icon: '💰', unlocked: false },
-                        { id: 'speedster', name: 'Speedster', desc: 'Complete Memory in 30s', icon: '⚡', unlocked: false },
-                        { id: 'gaming_legend', name: 'Gaming Legend', desc: 'Unlock 4 achievements', icon: '👑', unlocked: false }
-                    ]
-                };
-            }
-
-            save() {
-                localStorage.setItem('gamePlatformData', JSON.stringify(this.data));
-            }
-
-            addScore(game, score, time) {
-                this.data.totalScore += score;
-                this.data.gamesPlayed++;
-                this.data.leaderboard.push({ game, score, time: new Date().toLocaleDateString() });
-                this.data.leaderboard = this.data.leaderboard.sort((a, b) => b.score - a.score).slice(0, 10);
-                
-                if (game === 'memory') {
-                    this.data.memoryStats.high = Math.max(this.data.memoryStats.high, score);
-                    this.data.memoryStats.played++;
-                } else {
-                    this.data.chasingStats.high = Math.max(this.data.chasingStats.high, score);
-                    this.data.chasingStats.played++;
-                }
-                
-                this.updateLevel();
-                this.save();
-            }
-
-            updateLevel() {
-                this.data.playerLevel = 1 + Math.floor(this.data.totalScore / 1000);
-            }
-
-            unlockAchievement(id) {
-                const ach = this.data.achievements.find(a => a.id === id);
-                if (ach && !ach.unlocked) {
-                    ach.unlocked = true;
-                    this.save();
-                    return true;
-                }
-                return false;
-            }
-
-            reset() {
-                this.data = this.load();
-                localStorage.removeItem('gamePlatformData');
-            }
-        }
-
-        // Initialize
-        const platformData = new PlatformData();
-        let currentGame = null;
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const overlay = document.getElementById('modalOverlay');
+        const startScreen = document.getElementById('startScreen');
+        
+        // Game State
         let gameActive = false;
+        let score = 0;
+        let health = 100;
+        let stamina = 100;
+        let animationId;
 
-        // UI Functions
-        function showPanel(panelName) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(panelName).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            updateDashboard();
-        }
+        // Player
+        const player = {
+            x: 0,
+            y: 0,
+            size: 15,
+            speed: 3,
+            vx: 0,
+            vy: 0,
+            color: '#6366f1',
+            isSprinting: false,
+            isHiding: false
+        };
 
-        function startGame(game) {
-            if (game === 'memory') {
-                showPanel('memoryGame');
-                initMemoryGame();
-            } else if (game === 'chasing') {
-                showPanel('chasingGame');
-                initChasingGame();
+        // Enemies
+        let enemies = [];
+        const visionRange = 200;
+        const visionFov = Math.PI / 2; // 90 degrees
+
+        // Coins
+        let coins = [];
+
+        // Obstacles (Trees for hiding)
+        let obstacles = [];
+
+        function initGame() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            score = 0;
+            health = 100;
+            stamina = 100;
+            enemies = [];
+            coins = [];
+            obstacles = [];
+
+            // Add Enemies
+            for(let i=0; i<3; i++) {
+                enemies.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: 12,
+                    speed: 1.5,
+                    angle: Math.random() * Math.PI * 2,
+                    state: 'patrol',
+                    lastSeen: null
+                });
+            }
+
+            // Add Coins
+            for(let i=0; i<5; i++) {
+                spawnCoin();
+            }
+
+            // Add Obstacles (Trees)
+            for(let i=0; i<6; i++) {
+                obstacles.push({
+                    x: Math.random() * (canvas.width - 60) + 30,
+                    y: Math.random() * (canvas.height - 60) + 30,
+                    w: 60,
+                    h: 60,
+                    type: 'tree'
+                });
             }
         }
 
-        function updateDashboard() {
-            document.getElementById('playerLevel').textContent = platformData.data.playerLevel;
-            document.getElementById('totalScore').textContent = platformData.data.totalScore;
-            document.getElementById('gamesPlayed').textContent = platformData.data.gamesPlayed;
-            
-            const unlockedAchs = platformData.data.achievements.filter(a => a.unlocked).length;
-            document.getElementById('achievements').textContent = `${unlockedAchs}/5`;
-            
-            // Update stats
-            document.getElementById('memoryHigh').textContent = platformData.data.memoryStats.high;
-            document.getElementById('chasingHigh').textContent = platformData.data.chasingStats.high;
-            
-            // Update leaderboard
-            const leaderboardHtml = platformData.data.leaderboard.map((entry, idx) => `
-                <div class="leaderboard-entry">
-                    <div class="entry-rank">#${idx + 1}</div>
-                    <div class="entry-info">
-                        <div style="font-weight: bold;">${entry.game}</div>
-                        <div style="font-size: 12px; color: var(--light);">${entry.time}</div>
-                    </div>
-                    <div class="entry-score">${entry.score}</div>
-                </div>
-            `).join('');
-            document.getElementById('leaderboard').innerHTML = leaderboardHtml || '<p style="color: var(--light); text-align: center;">No games played yet!</p>';
-            
-            // Update achievements
-            const achHtml = platformData.data.achievements.map(ach => `
-                <div class="achievement ${ach.unlocked ? 'unlocked' : ''}">
-                    <div class="achievement-icon">${ach.icon}</div>
-                    <div class="achievement-title">${ach.unlocked ? '✓' : '✗'} ${ach.name}</div>
-                    <div class="achievement-desc">${ach.desc}</div>
-                </div>
-            `).join('');
-            document.getElementById('achievementsGrid').innerHTML = achHtml;
+        function spawnCoin() {
+            coins.push({
+                x: Math.random() * (canvas.width - 20) + 10,
+                y: Math.random() * (canvas.height - 20) + 10,
+                size: 6
+            });
         }
 
-        // MEMORY GAME
-        class MemoryGame {
-            constructor() {
-                this.cards = [];
-                this.flipped = [];
-                this.matched = 0;
-                this.moves = 0;
-                this.score = 0;
-                this.timeStart = Date.now();
-                this.timeElapsed = 0;
-                this.gameOver = false;
-                this.checkTimer = null;
-                this.timerInterval = null;
-                this.emojis = ['🍕', '🎮', '🚀', '🎨', '🎭', '🎸', '🌟', '⚽'];
-                this.init();
-                this.startTimer();
+        const keys = {};
+        window.addEventListener('keydown', e => { keys[e.code] = true; });
+        window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+        function update() {
+            if(!gameActive) return;
+
+            // Player Movement
+            player.vx = 0;
+            player.vy = 0;
+            if(keys['KeyW'] || keys['ArrowUp']) player.vy = -1;
+            if(keys['KeyS'] || keys['ArrowDown']) player.vy = 1;
+            if(keys['KeyA'] || keys['ArrowLeft']) player.vx = -1;
+            if(keys['KeyD'] || keys['ArrowRight']) player.vx = 1;
+
+            player.isSprinting = (keys['ShiftLeft'] || keys['ShiftRight']) && stamina > 0;
+            let currentSpeed = player.speed * (player.isSprinting ? 2 : 1);
+            
+            if(player.isSprinting) {
+                stamina = Math.max(0, stamina - 0.8);
+            } else {
+                stamina = Math.min(100, stamina + 0.3);
             }
 
-            startTimer() {
-                this.timerInterval = setInterval(() => {
-                    if (!this.gameOver) {
-                        this.timeElapsed = Math.floor((Date.now() - this.timeStart) / 1000);
-                        this.updateHUD();
-                    }
-                }, 1000);
-            }
+            player.x += player.vx * currentSpeed;
+            player.y += player.vy * currentSpeed;
 
-            updateHUD() {
-                const timeEl = document.getElementById('memoryTime');
-                const movesEl = document.getElementById('memoryMoves');
-                const matchesEl = document.getElementById('memoryMatches');
-                const scoreEl = document.getElementById('memoryScore');
-                
-                if (timeEl) timeEl.textContent = this.timeElapsed + 's';
-                if (movesEl) movesEl.textContent = this.moves;
-                if (matchesEl) matchesEl.textContent = `${Math.floor(this.matched/2)}/8`;
-                
-                // Calculate current potential score if no matches yet, otherwise show current score
-                const currentScore = Math.max(0, 1000 - (this.moves * 20) - (this.timeElapsed * 5));
-                if (scoreEl) scoreEl.textContent = Math.floor(this.score || currentScore);
-            }
+            // Boundaries
+            player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+            player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
 
-            init() {
-                const emojisSelected = [...this.emojis, ...this.emojis];
-                for (let i = emojisSelected.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [emojisSelected[i], emojisSelected[j]] = [emojisSelected[j], emojisSelected[i]];
+            // Check Hiding
+            player.isHiding = false;
+            obstacles.forEach(obs => {
+                if(player.x > obs.x && player.x < obs.x + obs.w && player.y > obs.y && player.y < obs.y + obs.h) {
+                    player.isHiding = true;
                 }
-                this.cards = emojisSelected.map((emoji, idx) => ({
-                    id: idx,
-                    emoji,
-                    flipped: false,
-                    matched: false
-                }));
-                this.render();
-            }
+            });
 
-            render() {
-                const grid = document.getElementById('memoryGrid');
-                grid.innerHTML = this.cards.map(card => `
-                    <div class="memory-card ${card.flipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" 
-                         onclick="memoryGame.flipCard(${card.id})"
-                         style="opacity: ${card.matched ? 0.5 : 1};">
-                        ${card.flipped || card.matched ? card.emoji : '?'}
-                    </div>
-                `).join('');
-                this.updateHUD();
-            }
-
-            flipCard(id) {
-                if (this.gameOver || this.flipped.length >= 2 || this.cards[id].matched) return;
+            // Update Enemies
+            enemies.forEach(en => {
+                // Vision Check
+                const dx = player.x - en.x;
+                const dy = player.y - en.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
                 
-                const card = this.cards[id];
-                card.flipped = true;
-                this.flipped.push(card);
-                this.render();
-
-                if (this.flipped.length === 2) {
-                    this.moves++;
-                    if (this.flipped[0].emoji === this.flipped[1].emoji) {
-                        this.flipped[0].matched = true;
-                        this.flipped[1].matched = true;
-                        this.matched += 2;
-                        // Award points based on speed and efficiency
-                        this.score += Math.max(10, 100 - (this.moves * 2) - (this.timeElapsed / 2));
-                        this.flipped = [];
-                        this.render();
-
-                        if (this.matched === 16) {
-                            this.gameOver = true;
-                            this.endGame();
+                let canSee = false;
+                if(dist < visionRange) {
+                    const angleToPlayer = Math.atan2(dy, dx);
+                    let angleDiff = angleToPlayer - en.angle;
+                    while(angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+                    while(angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+                    
+                    if(Math.abs(angleDiff) < visionFov / 2) {
+                        if(!player.isHiding || dist < 40) {
+                            canSee = true;
                         }
-                    } else {
-                        this.checkTimer = setTimeout(() => {
-                            this.flipped[0].flipped = false;
-                            this.flipped[1].flipped = false;
-                            this.flipped = [];
-                            this.render();
-                        }, 600);
                     }
                 }
-            }
 
-            endGame() {
-                platformData.addScore('memory', this.score, this.timeElapsed);
-                
-                // Check achievements
-                if (this.score >= 300) platformData.unlockAchievement('memory_master');
-                if (this.timeElapsed <= 30) platformData.unlockAchievement('speedster');
-                
-                showGameOver('Memory Game', this.score);
-            }
-
-            reset() {
-                clearTimeout(this.checkTimer);
-                clearInterval(this.timerInterval);
-                this.cards = [];
-                this.flipped = [];
-                this.matched = 0;
-                this.moves = 0;
-                this.score = 0;
-                this.timeStart = Date.now();
-                this.gameOver = false;
-                this.init();
-                this.startTimer();
-            }
-        }
-
-        let memoryGame;
-        function initMemoryGame() {
-            memoryGame = new MemoryGame();
-            gameActive = true;
-        }
-
-        function resetMemoryGame() {
-            if (memoryGame) memoryGame.reset();
-        }
-
-        // CHASING GAME
-        class ChasingGame {
-            constructor() {
-                this.canvas = document.getElementById('gameCanvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.playerPos = { x: this.canvas.width / 2, y: this.canvas.height / 2 };
-                this.enemyPos = { x: 100, y: 100 };
-                this.coins = [];
-                this.playerRadius = 12;
-                this.enemyRadius = 10;
-                this.playerSpeed = 4;
-                this.enemySpeed = 1.8;
-                this.score = 0;
-                this.coinsCollected = 0;
-                this.timeStart = Date.now();
-                this.gameOver = false;
-                this.keys = {};
-                
-                // Spawn coins
-                for (let i = 0; i < 5; i++) {
-                    this.coins.push({
-                        x: Math.random() * (this.canvas.width - 100) + 50,
-                        y: Math.random() * (this.canvas.height - 100) + 50
-                    });
+                if(canSee) {
+                    en.state = 'chase';
+                    en.lastSeen = {x: player.x, y: player.y};
+                    const angleToPlayer = Math.atan2(dy, dx);
+                    en.angle = angleToPlayer;
+                    en.x += Math.cos(en.angle) * en.speed * 1.8;
+                    en.y += Math.sin(en.angle) * en.speed * 1.8;
+                } else if(en.state === 'chase') {
+                    en.state = 'search';
+                    setTimeout(() => { if(en.state === 'search') en.state = 'patrol'; }, 3000);
                 }
 
-                this.setupControls();
-                this.gameLoop();
-            }
-
-            setupControls() {
-                const handleKey = (e, state) => {
-                    this.keys[e.key.toUpperCase()] = state;
-                    this.keys[e.key.toLowerCase()] = state;
-                };
-
-                document.addEventListener('keydown', (e) => handleKey(e, true));
-                document.addEventListener('keyup', (e) => handleKey(e, false));
-            }
-
-            update() {
-                if (this.gameOver) return;
-
-                // Player movement
-                if (this.keys['ARROWUP'] || this.keys['W']) this.playerPos.y -= this.playerSpeed;
-                if (this.keys['ARROWDOWN'] || this.keys['S']) this.playerPos.y += this.playerSpeed;
-                if (this.keys['ARROWLEFT'] || this.keys['A']) this.playerPos.x -= this.playerSpeed;
-                if (this.keys['ARROWRIGHT'] || this.keys['D']) this.playerPos.x += this.playerSpeed;
-
-                // Boundaries
-                this.playerPos.x = Math.max(this.playerRadius, Math.min(this.canvas.width - this.playerRadius, this.playerPos.x));
-                this.playerPos.y = Math.max(this.playerRadius, Math.min(this.canvas.height - this.playerRadius, this.playerPos.y));
-
-                // Enemy AI
-                const dx = this.playerPos.x - this.enemyPos.x;
-                const dy = this.playerPos.y - this.enemyPos.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist > 0) {
-                    this.enemyPos.x += (dx / dist) * this.enemySpeed;
-                    this.enemyPos.y += (dy / dist) * this.enemySpeed;
+                if(en.state === 'patrol') {
+                    en.x += Math.cos(en.angle) * en.speed;
+                    en.y += Math.sin(en.angle) * en.speed;
+                    if(Math.random() < 0.02) en.angle += (Math.random() - 0.5) * 1;
                 }
 
-                // Coin collection
-                this.coins = this.coins.filter(coin => {
-                    const cdx = this.playerPos.x - coin.x;
-                    const cdy = this.playerPos.y - coin.y;
-                    const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-
-                    if (cdist < this.playerRadius + 6) {
-                        this.coinsCollected++;
-                        this.score += 50;
-                        return false;
-                    }
-                    return true;
-                });
-
-                // Spawn new coins
-                while (this.coins.length < 5) {
-                    this.coins.push({
-                        x: Math.random() * (this.canvas.width - 100) + 50,
-                        y: Math.random() * (this.canvas.height - 100) + 50
-                    });
+                // Enemy Boundaries
+                if(en.x < 0 || en.x > canvas.width || en.y < 0 || en.y > canvas.height) {
+                    en.angle += Math.PI;
                 }
 
-                // Score over time
-                this.score += 0.05;
-
-                // Collision with enemy
-                const edx = this.playerPos.x - this.enemyPos.x;
-                const edy = this.playerPos.y - this.enemyPos.y;
-                const edist = Math.sqrt(edx * edx + edy * edy);
-
-                if (edist < (this.playerRadius + this.enemyRadius)) {
-                    this.endGame();
+                // Collision with player
+                if(dist < player.size + en.size) {
+                    health = Math.max(0, health - 0.5);
+                    if(health <= 0) gameOver();
                 }
-            }
+            });
 
-            draw() {
-                this.ctx.fillStyle = '#0A0E27';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            // Coins
+            coins.forEach((coin, i) => {
+                const dx = player.x - coin.x;
+                const dy = player.y - coin.y;
+                if(Math.sqrt(dx*dx + dy*dy) < player.size + coin.size) {
+                    coins.splice(i, 1);
+                    score += 100;
+                    spawnCoin();
+                }
+            });
 
-                // Draw coins
-                this.coins.forEach(coin => {
-                    this.ctx.fillStyle = '#FFBE0B';
-                    this.ctx.beginPath();
-                    this.ctx.arc(coin.x, coin.y, 6, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    this.ctx.strokeStyle = '#FF9500';
-                    this.ctx.lineWidth = 2;
-                    this.ctx.stroke();
-                });
-
-                // Draw player
-                this.ctx.fillStyle = '#00D4FF';
-                this.ctx.beginPath();
-                this.ctx.arc(this.playerPos.x, this.playerPos.y, this.playerRadius, 0, Math.PI * 2);
-                this.ctx.fill();
-                this.ctx.strokeStyle = '#AAAAAA';
-                this.ctx.lineWidth = 2;
-                this.ctx.stroke();
-
-                // Draw enemy
-                this.ctx.fillStyle = '#FF003E';
-                this.ctx.beginPath();
-                this.ctx.arc(this.enemyPos.x, this.enemyPos.y, this.enemyRadius, 0, Math.PI * 2);
-                this.ctx.fill();
-                this.ctx.strokeStyle = '#FFBE0B';
-                this.ctx.lineWidth = 2;
-                this.ctx.stroke();
-
-                // Draw HUD
-                this.ctx.fillStyle = '#00D4FF';
-                this.ctx.font = 'bold 16px Courier New';
-                const timeElapsed = Math.floor((Date.now() - this.timeStart) / 1000);
-                this.ctx.fillText(`Score: ${Math.floor(this.score)}`, 10, 25);
-                this.ctx.fillText(`Coins: ${this.coinsCollected}`, 10, 50);
-                this.ctx.fillText(`Time: ${timeElapsed}s`, 10, 75);
-            }
-
-            gameLoop() {
-                this.update();
-                this.draw();
-                if (!this.gameOver) requestAnimationFrame(() => this.gameLoop());
-            }
-
-            endGame() {
-                this.gameOver = true;
-                const timeElapsed = Math.floor((Date.now() - this.timeStart) / 1000);
-                platformData.addScore('chasing', Math.floor(this.score), timeElapsed);
-                
-                if (timeElapsed >= 20) platformData.unlockAchievement('chasing_survivor');
-                if (this.coinsCollected >= 30) platformData.unlockAchievement('coin_collector');
-                
-                showGameOver('Chasing Game', Math.floor(this.score));
-            }
+            draw();
+            animationId = requestAnimationFrame(update);
         }
 
-        let chasingGame;
-        function initChasingGame() {
-            chasingGame = new ChasingGame();
-            gameActive = true;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Obstacles (Trees)
+            obstacles.forEach(obs => {
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+                ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+                ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+            });
+
+            // Draw Coins
+            coins.forEach(coin => {
+                ctx.fillStyle = '#fbbf24';
+                ctx.beginPath();
+                ctx.arc(coin.x, coin.y, coin.size, 0, Math.PI * 2);
+                ctx.fill();
+                // Glow
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#fbbf24';
+            });
+            ctx.shadowBlur = 0;
+
+            // Draw Enemies
+            enemies.forEach(en => {
+                // Vision Cone
+                ctx.fillStyle = en.state === 'chase' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(251, 191, 36, 0.05)';
+                ctx.beginPath();
+                ctx.moveTo(en.x, en.y);
+                ctx.arc(en.x, en.y, visionRange, en.angle - visionFov/2, en.angle + visionFov/2);
+                ctx.lineTo(en.x, en.y);
+                ctx.fill();
+
+                ctx.fillStyle = en.state === 'chase' ? '#ef4444' : '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(en.x, en.y, en.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw Player
+            ctx.fillStyle = player.isHiding ? 'rgba(99, 102, 241, 0.4)' : '#6366f1';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
+            ctx.fill();
+            if(!player.isHiding) {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#6366f1';
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            ctx.shadowBlur = 0;
+
+            // Update HUD
+            document.getElementById('hudScore').textContent = score.toString().padStart(4, '0');
+            document.getElementById('hudHealth').textContent = Math.ceil(health) + '%';
+            document.getElementById('staminaBar').style.width = stamina + '%';
         }
 
-        function resetChasingGame() {
+        function openGame(type) {
+            overlay.classList.add('active');
+            initGame();
+        }
+
+        function closeGame() {
+            overlay.classList.remove('active');
             gameActive = false;
-            initChasingGame();
+            cancelAnimationFrame(animationId);
         }
 
-        // Game Over Modal
-        function showGameOver(game, score) {
-            document.getElementById('modalTitle').textContent = `${game} - Complete!`;
-            document.getElementById('modalScore').textContent = score;
-            document.getElementById('gameOverModal').classList.add('active');
+        function startGame() {
+            startScreen.style.display = 'none';
+            gameActive = true;
+            update();
+        }
+
+        function gameOver() {
             gameActive = false;
+            alert('Game Over! Your score: ' + score);
+            closeGame();
+            startScreen.style.display = 'flex';
         }
 
-        function closeGameOverModal() {
-            document.getElementById('gameOverModal').classList.remove('active');
-            updateDashboard();
-            showPanel('dashboard');
-        }
-
-        function resetData() {
-            if (confirm('Are you sure? This will reset all data!')) {
-                platformData.reset();
-                updateDashboard();
-                alert('Data reset!');
-            }
-        }
-
-        // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            updateDashboard();
-        });
     </script>
 </body>
 </html>
