@@ -6,6 +6,7 @@ A comprehensive gaming platform combining web-based dashboarding with Python-pow
 The **Game Platform Hub** is a hybrid application. It utilizes a modern, glassmorphic HTML/CSS/JS dashboard for high-level interaction and statistics, while leveraging Pygame for high-performance 2D gaming experiences.
 
 ---
+NOTE : "The icons in the top right are not functional , because it is a future scope and there is no Login page for this platform because it is a open source game application for users to play and enjoy."
 
 ## Functional Structure
 
