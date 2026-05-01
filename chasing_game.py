@@ -104,7 +104,7 @@ class Player:
         self.shield_time = duration
     
     def draw(self, surface: pygame.Surface):
-        
+         
         pygame.draw.circle(surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius)
         pygame.draw.circle(surface, Colors.LIGHT_GRAY.value, (int(self.pos.x), int(self.pos.y)), self.radius, 2)
         

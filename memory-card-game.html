@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +21,10 @@
             --color-light: #f5f5f5;
             --color-card-dark: #16213e;
             --color-card-light: #fffbf0;
-            
+
             --font-display: 'Courier New', monospace;
             --font-body: 'Arial', sans-serif;
-            
+
             --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
@@ -47,7 +48,7 @@
             margin: 0 auto;
         }
 
-        /* Header */
+
         header {
             display: flex;
             justify-content: space-between;
@@ -68,8 +69,15 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .header-controls {
@@ -132,7 +140,7 @@
             transform: rotate(20deg) scale(1.1);
         }
 
-        /* Stats Panel */
+
         .stats-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -155,6 +163,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -178,7 +187,7 @@
             text-shadow: 2px 2px 0 var(--color-primary);
         }
 
-        /* Difficulty Selector */
+
         .difficulty-selector {
             display: flex;
             gap: 10px;
@@ -215,11 +224,18 @@
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(51, 255, 0, 0.6); }
-            50% { box-shadow: 0 0 40px rgba(51, 255, 0, 0.8); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(51, 255, 0, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(51, 255, 0, 0.8);
+            }
         }
 
-        /* Game Board */
+
         .game-board {
             perspective: 1000px;
             margin-bottom: 40px;
@@ -256,7 +272,7 @@
             }
         }
 
-        /* Card Flip Animation */
+
         .card {
             aspect-ratio: 1;
             background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
@@ -297,8 +313,15 @@
         }
 
         @keyframes matchPulse {
-            0%, 100% { transform: scale(1) rotateY(180deg); }
-            50% { transform: scale(1.1) rotateY(180deg); }
+
+            0%,
+            100% {
+                transform: scale(1) rotateY(180deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotateY(180deg);
+            }
         }
 
         .card.matched::before {
@@ -314,7 +337,7 @@
             cursor: not-allowed;
         }
 
-        /* Leaderboard */
+
         .leaderboard-section {
             background: rgba(255, 255, 255, 0.15);
             border: 3px solid var(--color-secondary);
@@ -401,7 +424,7 @@
             color: var(--color-success);
         }
 
-        /* AI Indicator */
+
         .ai-indicator {
             display: flex;
             align-items: center;
@@ -428,11 +451,18 @@
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
         }
 
-        /* Game Over Modal */
+
         .modal {
             display: none;
             position: fixed;
@@ -452,8 +482,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
@@ -472,6 +507,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -567,6 +603,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -639,16 +676,16 @@
             try {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
+
                 oscillator.frequency.value = frequency;
                 oscillator.type = 'sine';
-                
+
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-                
+
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + duration);
             } catch (e) {
@@ -693,7 +730,7 @@
             setDifficulty(level) {
                 if (this.gameStarted) return;
                 this.difficulty = level;
-                
+
                 document.querySelectorAll('.difficulty-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
@@ -728,7 +765,7 @@
                 const totalCards = this.gridSize * this.gridSize;
                 const pairsNeeded = totalCards / 2;
                 const selectedEmojis = this.emojis.slice(0, pairsNeeded);
-                
+
                 this.cards = [...selectedEmojis, ...selectedEmojis]
                     .sort(() => Math.random() - 0.5)
                     .map((emoji, idx) => ({
@@ -819,7 +856,7 @@
                     const elapsed = Math.floor((Date.now() - this.timeStarted) / 1000);
                     const minutes = Math.floor(elapsed / 60);
                     const seconds = elapsed % 60;
-                    document.getElementById('timer').textContent = 
+                    document.getElementById('timer').textContent =
                         `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 }, 100);
             },
@@ -952,4 +989,5 @@
         });
     </script>
 </body>
+
 </html>

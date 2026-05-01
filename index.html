@@ -757,10 +757,6 @@
     <header>
         <div class="logo">NEXUS<span>.</span>ARCADE</div>
         <div class="header-controls">
-            <button class="btn-raw btn-raw--active" onclick="filterGames('all', this)">All</button>
-            <button class="btn-raw" onclick="filterGames('action', this)">Action</button>
-            <button class="btn-raw" onclick="filterGames('puzzle', this)">Puzzle</button>
-            <button class="btn-raw" onclick="filterGames('arcade', this)">Arcade</button>
             <button class="theme-toggle-raw" onclick="toggleTheme()" id="themeBtn">&#127769;</button>
         </div>
     </header>
@@ -825,31 +821,10 @@
             </div> -->
         </section>
 
-        <section class="stats-strip">
-            <div class="stats-inner">
-                <div class="stat-item fade-in-up"><span class="stat-label">Total Runs</span>
-                    <div class="stat-value">12.8k</div>
-                </div>
-                <div class="stat-item fade-in-up" style="animation-delay:0.1s"><span class="stat-label">Players
-                        Online</span>
-                    <div class="stat-value">456</div>
-                </div>
-                <div class="stat-item fade-in-up" style="animation-delay:0.2s"><span class="stat-label">World
-                        Record</span>
-                    <div class="stat-value">45,902</div>
-                </div>
-                <div class="stat-item fade-in-up" style="animation-delay:0.3s"><span class="stat-label">Uptime</span>
-                    <div class="stat-value">99.7%</div>
-                </div>
-            </div>
-        </section>
+
     </main>
 
-    <footer>
-        <div class="footer-text">NEXUS ARCADE — Built for the underground. No corporate polish.</div>
-        <div class="footer-text"><a href="#">GitHub</a> &middot; <a href="#">Community</a> &middot; <a href="#">Report
-                Bug</a></div>
-    </footer>
+
 
     <div class="game-view" id="gameView">
         <div class="game-view-header">
@@ -871,12 +846,17 @@
                 <button class="btn-primary-raw" onclick="startGame()" style="margin-top:1rem;">Start Simulation</button>
             </div>
             <canvas id="gameCanvas" tabindex="0" style="outline:none;"></canvas>
-            <div class="on-screen-controls" id="onScreenControls" style="position:absolute; bottom:var(--space-md); right:var(--space-md); display:flex; flex-direction:column; align-items:center; gap:5px; z-index:100; user-select:none; opacity: 0.8;">
-                <button class="dpad-btn" id="dpadUp" style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&uarr;</button>
+            <div class="on-screen-controls" id="onScreenControls"
+                style="position:absolute; bottom:var(--space-md); right:var(--space-md); display:flex; flex-direction:column; align-items:center; gap:5px; z-index:100; user-select:none; opacity: 0.8;">
+                <button class="dpad-btn" id="dpadUp"
+                    style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&uarr;</button>
                 <div style="display:flex; gap:5px;">
-                    <button class="dpad-btn" id="dpadLeft" style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&larr;</button>
-                    <button class="dpad-btn" id="dpadDown" style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&darr;</button>
-                    <button class="dpad-btn" id="dpadRight" style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&rarr;</button>
+                    <button class="dpad-btn" id="dpadLeft"
+                        style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&larr;</button>
+                    <button class="dpad-btn" id="dpadDown"
+                        style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&darr;</button>
+                    <button class="dpad-btn" id="dpadRight"
+                        style="width:44px; height:44px; background:rgba(13,0,21,0.8); border:2px solid var(--neon-pink); color:var(--text-primary); cursor:pointer; font-size:1.2rem; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));">&rarr;</button>
                 </div>
             </div>
         </div>
@@ -969,7 +949,7 @@
             currentGame = type;
             chaseEl.style.display = type === 'chasing' ? 'flex' : 'none';
             memoryEl.style.display = type === 'memory' ? 'block' : 'none';
-            
+
             // Defer initialization to allow the browser to apply display:flex and calculate dimensions
             setTimeout(() => {
                 if (type === 'chasing') initChaseGame();
@@ -985,14 +965,13 @@
             document.getElementById('memoryOverlay').style.display = 'none';
         }
 
-        // ===== CHASE MASTER =====
+
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         let player, enemies, coins, obstacles, score, health, stamina;
 
         function initChaseGame() {
-            // Ensure minimum dimensions to prevent infinite loop in enemy placement
-            canvas.width = Math.max(400, canvas.parentElement.clientWidth);
+
             canvas.height = Math.max(300, canvas.parentElement.clientHeight);
             gameTime = 0; score = 0; health = 100; stamina = 100;
             player = { x: canvas.width / 2, y: canvas.height / 2, size: 14, speed: 3.5, isHiding: false };
@@ -1009,7 +988,7 @@
         }
 
         const keys = { w: false, a: false, s: false, d: false, up: false, down: false, left: false, right: false, shift: false };
-        
+
         window.addEventListener('keydown', e => {
             if (e.key === 'w' || e.key === 'W' || e.code === 'KeyW') keys.w = true;
             if (e.key === 'a' || e.key === 'A' || e.code === 'KeyA') keys.a = true;
@@ -1033,13 +1012,13 @@
             if (e.key === 'ArrowRight' || e.code === 'ArrowRight') keys.right = false;
             if (e.key === 'Shift' || e.code === 'ShiftLeft' || e.code === 'ShiftRight') keys.shift = false;
         });
-        
-        // Prevent keys from getting stuck if you click away from the browser
+
+
         window.addEventListener('blur', () => {
             for (let k in keys) keys[k] = false;
         });
 
-        // Bind on-screen controls
+
         const bindDpad = (id, keyName) => {
             const btn = document.getElementById(id);
             if (!btn) return;
@@ -1048,8 +1027,8 @@
             btn.addEventListener('mousedown', press);
             btn.addEventListener('mouseup', release);
             btn.addEventListener('mouseleave', release);
-            btn.addEventListener('touchstart', press, {passive: false});
-            btn.addEventListener('touchend', release, {passive: false});
+            btn.addEventListener('touchstart', press, { passive: false });
+            btn.addEventListener('touchend', release, { passive: false });
         };
         bindDpad('dpadUp', 'up');
         bindDpad('dpadDown', 'down');
@@ -1064,7 +1043,7 @@
             if (keys.s || keys.down) my += 1;
             if (keys.a || keys.left) mx -= 1;
             if (keys.d || keys.right) mx += 1;
-            
+
             if (mx && my) { mx *= 0.707; my *= 0.707; }
             const sprint = keys.shift && stamina > 0;
             const spd = player.speed * (sprint ? 1.8 : 1);
@@ -1154,16 +1133,16 @@
             document.getElementById('hudStamina').textContent = Math.ceil(stamina);
         }
 
-        // Refocus canvas if user clicks the game area
+
         document.getElementById('chaseGame').addEventListener('click', () => {
             if (gameActive) document.getElementById('gameCanvas').focus();
         });
 
-        function startGame() { 
-            document.getElementById('startScreen').style.display = 'none'; 
-            gameActive = true; 
-            document.getElementById('gameCanvas').focus(); // Grab keyboard focus
-            chaseUpdate(); 
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            gameActive = true;
+            document.getElementById('gameCanvas').focus();
+            chaseUpdate();
         }
 
         function chaseGameOver() {
@@ -1180,7 +1159,7 @@
             }
         });
 
-        // ===== MEMORY MATRIX =====
+
         let memCards = [], memFlipped = [], memMatched = [], memMoves = 0, memScore = 0, memGameStarted = false, memSeconds = 0, memDifficulty = 'easy', memTotalPairs = 8;
         const memEmojis = ['\uD83C\uDF55', '\uD83C\uDFAE', '\uD83C\uDFB0', '\uD83C\uDFC5', '\uD83C\uDFB2', '\uD83C\uDF3F', '\uD83C\uDF02', '\uD83C\uDFC6', '\uD83D\uDC36', '\uD83C\uDF82', '\uD83D\uDC22', '\uD83C\uDFAB', '\uD83C\uDF32', '\uD83C\uDF3A', '\uD83C\uDF83', '\uD83D\uDCA0', '\uD83D\uDC51', '\uD83C\uDFC7', '\uD83C\uDFB4', '\uD83C\uDFC1', '\uD83C\uDF7A', '\uD83C\uDF38', '\uD83D\uDC9C', '\uD83D\uDC0B'];
 

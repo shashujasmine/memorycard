@@ -112,7 +112,7 @@ except:
 
 @dataclass
 class Vector2:
-    """Simple 2D vector class"""
+                   
     x: float
     y: float
     
@@ -130,7 +130,7 @@ class Vector2:
 
 @dataclass
 class Achievement:
-    """Player achievement"""
+
     id: str
     name: str
     description: str
@@ -138,7 +138,7 @@ class Achievement:
 
 @dataclass
 class PlayerStats:
-    """Player statistics"""
+
     high_score: int = 0
     games_played: int = 0
     coins_collected: int = 0
@@ -146,9 +146,9 @@ class PlayerStats:
     max_wave: int = 0
     achievements: List[Achievement] = field(default_factory=list)
 
-# ==================== GAME OBJECTS ====================
+
 class Player:
-    """Player character"""
+    
     def __init__(self, x: float, y: float):
         self.pos = Vector2(x, y)
         self.radius = 15
@@ -162,7 +162,7 @@ class Player:
         self.teleport_cooldown = 0
     
     def handle_input(self, keys):
-        """Handle player movement"""
+
         self.velocity = Vector2(0, 0)
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.velocity.y = -self.speed
@@ -174,27 +174,27 @@ class Player:
             self.velocity.x = self.speed
     
     def update(self):
-        """Update player position and status"""
+
         self.pos.x += self.velocity.x
         self.pos.y += self.velocity.y
         
-        # Boundary checking
+
         self.pos.x = max(self.radius, min(SCREEN_WIDTH - self.radius, self.pos.x))
         self.pos.y = max(70 + self.radius, min(SCREEN_HEIGHT - self.radius, self.pos.y))
         
-        # Update shield
+
         if self.has_shield:
             self.shield_time -= 1
             if self.shield_time <= 0:
                 self.has_shield = False
         
-        # Update invincibility
+
         if self.invincible:
             self.invincible_time -= 1
             if self.invincible_time <= 0:
                 self.invincible = False
         
-        # Update teleport cooldown
+
         if self.teleport_cooldown > 0:
             self.teleport_cooldown -= 1
     
@@ -208,7 +208,7 @@ class Player:
         self.invincible_time = duration
     
     def teleport(self):
-        """Teleport to random safe location"""
+
         if self.teleport_cooldown > 0:
             return False
         
@@ -219,19 +219,19 @@ class Player:
         return True
     
     def draw(self, surface: pygame.Surface):
-        """Draw player with effects"""
-        # Invincibility flashing
+
+
         if self.invincible and int(self.invincible_time / 10) % 2 == 0:
             return
         
         pygame.draw.circle(surface, self.color, (int(self.pos.x), int(self.pos.y)), self.radius)
         pygame.draw.circle(surface, Colors.LIGHT_GRAY.value, (int(self.pos.x), int(self.pos.y)), self.radius, 2)
         
-        # Shield
+
         if self.has_shield:
             pygame.draw.circle(surface, Colors.CYAN.value, (int(self.pos.x), int(self.pos.y)), self.radius + 8, 3)
         
-        # Invincibility aura
+
         if self.invincible:
             pygame.draw.circle(surface, Colors.PINK.value, (int(self.pos.x), int(self.pos.y)), self.radius + 5, 2)
 
@@ -255,7 +255,7 @@ class Enemy:
         self.visible = True
     
     def update(self, player: Player):
-        """Update enemy behavior based on type"""
+    
         self.target_player = player
         
         if self.enemy_type == EnemyType.TRACKER:
@@ -267,38 +267,37 @@ class Enemy:
         elif self.enemy_type == EnemyType.BOUNCER:
             self.update_bouncer(player)
         
-        # Boundary checking
+
         self.pos.x = max(self.radius, min(SCREEN_WIDTH - self.radius, self.pos.x))
         self.pos.y = max(70 + self.radius, min(SCREEN_HEIGHT - self.radius, self.pos.y))
     
     def update_tracker(self, player: Player):
-        """Fast tracker - aggressive chase"""
+
         direction = Vector2(player.pos.x - self.pos.x, player.pos.y - self.pos.y).normalize()
         self.pos.x += direction.x * self.speed * 1.3
         self.pos.y += direction.y * self.speed * 1.3
     
     def update_tank(self, player: Player):
-        """Slow tank - large and slow"""
+
         direction = Vector2(player.pos.x - self.pos.x, player.pos.y - self.pos.y).normalize()
         self.pos.x += direction.x * self.speed * 0.6
         self.pos.y += direction.y * self.speed * 0.6
     
     def update_ghost(self, player: Player):
-        """Ghost - invisible but predictable"""
-        # Visibility flickers
+
+
         self.behavior_timer += 1
         self.visible = (self.behavior_timer // 30) % 2 == 0
         
-        # Follows predictable path
         direction = Vector2(player.pos.x - self.pos.x, player.pos.y - self.pos.y).normalize()
         self.pos.x += direction.x * self.speed * 0.9
         self.pos.y += direction.y * self.speed * 0.9
     
     def update_bouncer(self, player: Player):
-        """Bouncer - chaotic movement"""
+
         self.behavior_timer += 1
         
-        # Change direction every 120 frames
+
         if self.behavior_timer > 120:
             self.velocity = Vector2(
                 random.uniform(-1, 1),
@@ -306,7 +305,7 @@ class Enemy:
             ).normalize()
             self.behavior_timer = 0
         
-        # Occasionally chase player
+
         if random.random() < 0.1:
             direction = Vector2(player.pos.x - self.pos.x, player.pos.y - self.pos.y).normalize()
             self.velocity = direction
@@ -315,7 +314,7 @@ class Enemy:
         self.pos.y += self.velocity.y * self.speed
     
     def draw(self, surface: pygame.Surface):
-        """Draw enemy"""
+        """Draw enemy uhhbjh ghvv kukunk; gugyu ugugu gjyyj ugyuu ububub buyuu fhdubvfvfbbv dbhd dvbbxhjvs hfbv fbj hvhjbvhj jhvbghg ghvn ygy giuhi yihi vygugyh """
         if not self.visible and self.enemy_type == EnemyType.GHOST:
             # Draw faint ghost
             pygame.draw.circle(surface, (*self.color, 100), (int(self.pos.x), int(self.pos.y)), self.radius)

@@ -25,7 +25,7 @@ FPS = 60
 GAME_TITLE = "🎮 GAME PLATFORM HUB"
 SAVE_FILE = "game_platform_data.json"
 
-# Platform States
+
 class PlatformState(Enum):
     MAIN_MENU = 1
     GAME_SELECTION = 2
@@ -35,7 +35,7 @@ class PlatformState(Enum):
     ACHIEVEMENTS = 6
     LEADERBOARD = 7
 
-# Colors
+
 class Colors(Enum):
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
@@ -51,7 +51,7 @@ class Colors(Enum):
     PINK = (255, 100, 200)
     DARK_BLUE = (20, 50, 100)
 
-# ==================== DATA CLASSES ====================
+
 @dataclass
 class Vector2:
     x: float
@@ -71,7 +71,7 @@ class GameStats:
     game_name: str
     high_score: int = 0
     games_played: int = 0
-    total_time: int = 0  # seconds
+    total_time: int = 0 
     best_time: int = 999999
     achievements_unlocked: int = 0
 
@@ -80,7 +80,7 @@ class PlatformAchievement:
     id: str
     name: str
     description: str
-    game: str  # which game
+    game: str 
     icon: str
     unlocked: bool = False
     unlock_date: str = ""
@@ -96,7 +96,7 @@ class PlatformStats:
     chasing_stats: GameStats = field(default_factory=lambda: GameStats("Chasing"))
     achievements: List[PlatformAchievement] = field(default_factory=list)
 
-# ==================== MEMORY CARD GAME (Pygame Version) ====================
+
 class MemoryCard:
     def __init__(self, x: float, y: float, size: int, emoji: str):
         self.x = x
@@ -144,7 +144,7 @@ class MemoryCardGame:
         self.card_size = 70
     
     def init_game(self):
-        """Initialize memory card game"""
+
         self.cards = []
         self.flipped_cards = []
         self.matched_count = 0
@@ -153,7 +153,7 @@ class MemoryCardGame:
         self.game_active = False
         self.game_over = False
         
-        # Create cards
+
         total_cards = self.grid_size * self.grid_size
         pairs = total_cards // 2
         emojis_selected = self.emojis[:pairs]
@@ -171,7 +171,7 @@ class MemoryCardGame:
                 self.cards.append(MemoryCard(x, y, self.card_size, emojis_shuffled[i * self.grid_size + j]))
     
     def handle_click(self, x: float, y: float):
-        """Handle card click"""
+
         if not self.game_active:
             self.game_active = True
             self.time_start = pygame.time.get_ticks()
@@ -196,10 +196,10 @@ class MemoryCardGame:
                         if self.matched_count == len(self.cards):
                             self.game_over = True
                     else:
-                        self.check_timer = 60  # 1 second at 60 FPS
+                        self.check_timer = 60 
     
     def update(self):
-        """Update game state"""
+
         if self.game_active and not self.game_over:
             self.time_elapsed = (pygame.time.get_ticks() - self.time_start) // 1000
         
@@ -211,12 +211,11 @@ class MemoryCardGame:
                 self.flipped_cards = []
     
     def draw(self, surface: pygame.Surface, font_small, font_medium):
-        """Draw memory game"""
-        # Draw cards
+
         for card in self.cards:
             card.draw(surface, font_small)
         
-        # Draw HUD
+
         score_text = font_medium.render(f"Score: {self.score}", True, Colors.GREEN.value)
         moves_text = font_medium.render(f"Moves: {self.moves}", True, Colors.YELLOW.value)
         time_text = font_medium.render(f"Time: {self.time_elapsed}s", True, Colors.CYAN.value)
@@ -237,7 +236,7 @@ class MemoryCardGame:
             surface.blit(win_text, (SCREEN_WIDTH // 2 - win_text.get_width() // 2, 300))
             surface.blit(final_score_text, (SCREEN_WIDTH // 2 - final_score_text.get_width() // 2, 400))
 
-# ==================== MINI CHASING GAME ====================
+
 class ChasingGameInstance:
     def __init__(self):
         self.player_pos = Vector2(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
@@ -252,7 +251,7 @@ class ChasingGameInstance:
         self.time_alive = 0
         self.game_over = False
         
-        # Spawn coins
+
         for _ in range(5):
             self.coins.append((
                 random.randint(100, SCREEN_WIDTH - 100),
@@ -274,14 +273,14 @@ class ChasingGameInstance:
         self.player_pos.y = max(100, min(SCREEN_HEIGHT - self.player_radius, self.player_pos.y))
     
     def update(self):
-        """Update game state"""
+
         if self.game_over:
             return
         
         self.time_alive += 1
         self.score += 0.1
         
-        # Enemy AI
+
         direction = Vector2(
             self.player_pos.x - self.enemy_pos.x,
             self.player_pos.y - self.enemy_pos.y
@@ -293,7 +292,7 @@ class ChasingGameInstance:
         self.enemy_pos.x = max(self.enemy_radius, min(SCREEN_WIDTH - self.enemy_radius, self.enemy_pos.x))
         self.enemy_pos.y = max(100, min(SCREEN_HEIGHT - self.enemy_radius, self.enemy_pos.y))
         
-        # Check coin collection
+
         for coin in self.coins[:]:
             dx = self.player_pos.x - coin[0]
             dy = self.player_pos.y - coin[1]
@@ -310,7 +309,7 @@ class ChasingGameInstance:
                         random.randint(150, SCREEN_HEIGHT - 100)
                     ))
         
-        # Check collision with enemy
+
         dx = self.player_pos.x - self.enemy_pos.x
         dy = self.player_pos.y - self.enemy_pos.y
         dist = math.sqrt(dx ** 2 + dy ** 2)
@@ -319,21 +318,21 @@ class ChasingGameInstance:
             self.game_over = True
     
     def draw(self, surface: pygame.Surface, font_small):
-        """Draw chasing game"""
-        # Draw coins
+
+
         for coin in self.coins:
             pygame.draw.circle(surface, Colors.YELLOW.value, (int(coin[0]), int(coin[1])), 6)
             pygame.draw.circle(surface, Colors.ORANGE.value, (int(coin[0]), int(coin[1])), 6, 2)
         
-        # Draw player
+
         pygame.draw.circle(surface, Colors.BLUE.value, (int(self.player_pos.x), int(self.player_pos.y)), self.player_radius)
         pygame.draw.circle(surface, Colors.LIGHT_GRAY.value, (int(self.player_pos.x), int(self.player_pos.y)), self.player_radius, 2)
         
-        # Draw enemy
+
         pygame.draw.circle(surface, Colors.RED.value, (int(self.enemy_pos.x), int(self.enemy_pos.y)), self.enemy_radius)
         pygame.draw.circle(surface, Colors.YELLOW.value, (int(self.enemy_pos.x), int(self.enemy_pos.y)), self.enemy_radius, 2)
         
-        # Draw HUD
+     
         score_text = font_small.render(f"Score: {int(self.score)}", True, Colors.GREEN.value)
         coins_text = font_small.render(f"Coins: {self.coins_collected}", True, Colors.YELLOW.value)
         time_text = font_small.render(f"Time: {self.time_alive // 60}s", True, Colors.CYAN.value)
@@ -354,14 +353,14 @@ class ChasingGameInstance:
             surface.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, 300))
             surface.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, 380))
 
-# ==================== MAIN GAME PLATFORM ====================
+
 class GamePlatformHub:
     def __init__(self):
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
         
-        # Fonts
+
         self.font_large = pygame.font.Font(None, 64)
         self.font_medium = pygame.font.Font(None, 40)
         self.font_small = pygame.font.Font(None, 28)
@@ -370,16 +369,16 @@ class GamePlatformHub:
         self.state = PlatformState.MAIN_MENU
         self.load_stats()
         
-        # Game instances
+
         self.memory_game = MemoryCardGame()
         self.chasing_game = ChasingGameInstance()
         
-        # Navigation
+
         self.selected_game = 0
         self.scroll_offset = 0
     
     def load_stats(self):
-        """Load platform statistics"""
+
         if os.path.exists(SAVE_FILE):
             try:
                 with open(SAVE_FILE, 'r') as f:
@@ -393,7 +392,7 @@ class GamePlatformHub:
         self.init_achievements()
     
     def init_achievements(self):
-        """Initialize achievements"""
+
         achievement_list = [
             PlatformAchievement("memory_master", "Memory Master", "Score 500+ in Memory Game", "Memory", "🧠"),
             PlatformAchievement("chasing_survivor", "Survivor", "Survive 30 seconds in Chasing", "Chasing", "🏃"),
@@ -411,7 +410,7 @@ class GamePlatformHub:
         self.stats.achievements = achievement_list
     
     def save_stats(self):
-        """Save platform statistics"""
+
         try:
             data = {
                 'player_name': self.stats.player_name,
@@ -444,7 +443,7 @@ class GamePlatformHub:
             pass
     
     def handle_input(self):
-        """Handle platform input"""
+
         keys = pygame.key.get_pressed()
         
         for event in pygame.event.get():
@@ -487,7 +486,7 @@ class GamePlatformHub:
                         if event.key == pygame.K_SPACE:
                             self.state = PlatformState.GAME_SELECTION
         
-        # Game-specific input handling
+
         if self.state == PlatformState.MEMORY_GAME:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.memory_game.handle_click(event.pos[0], event.pos[1])

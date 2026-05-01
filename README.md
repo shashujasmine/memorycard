@@ -1,56 +1,49 @@
-# Game Platform Hub - Multi-Game Dashboard
+# NEXUS ARCADE — Underground Retro Gaming
 
-A comprehensive gaming platform combining web-based dashboarding with Python-powered interactive games. The platform features a unified experience for tracking stats, achievements, and playing multiple mini-games.
+A comprehensive, dual-engine gaming platform combining a sleek web-based arcade dashboard with standalone Python-powered interactive games. The platform features a unified experience for tracking stats, achievements, and playing multiple mini-games across both web and desktop environments.
 
 ## Overview
-The **Game Platform Hub** is a hybrid application. It utilizes a modern, glassmorphic HTML/CSS/JS dashboard for high-level interaction and statistics, while leveraging Pygame for high-performance 2D gaming experiences.
+**NEXUS ARCADE** is a hybrid application. It utilizes a modern, gritty neon HTML/CSS/JS dashboard (`index.html`) for high-level interaction, game launching, and web-based gameplay, while leveraging Pygame for high-performance 2D standalone gaming experiences.
 
 ---
 
 ## Functional Structure
 
-### 1. Unified Dashboard (Web)
-- **Real-time Statistics**: Tracks player level, total scores, and games played across the platform.
-- **Achievement System**: Visual tracking of unlocked rewards and milestones.
-- **Game Selection Hub**: A centralized interface to launch different gaming modules.
-- **Persistent Storage**: Uses `localStorage` to keep your stats across browser sessions.
+### 1. NEXUS ARCADE Web Platform (`index.html`)
+- **Cyberpunk / Underground Aesthetic**: Highly polished dark mode UI with neon accents, dynamic grids, and responsive layouts.
+- **Embedded Web Games**: Play right in the browser!
+    - **Chase Master**: A canvas-based evasion game featuring vision-cone AI, stamina mechanics, coins, and a highly robust input system (supports WASD, Arrow Keys, and a built-in interactive on-screen D-Pad to prevent iframe focus-loss).
+    - **Memory Matrix**: A fast-paced tile-matching game with timer, move tracking, and scalable difficulty (Easy, Medium, Hard).
+- **Game Selection Hub**: A centralized, filtering-enabled interface to launch different gaming modules directly in an overlay.
 
-### 2. Mini-Games
-#### **Memory Card Game (HTML/JS & Python Versions)**
-- **Objective**: Match emoji pairs in the shortest time/moves.
-- **Features**: Animated card flips, score multiplier for speed, and difficulty scaling.
-
-#### **Chase Master - Enhanced Edition (Python/Pygame)**
-- **Objective**: Avoid diverse enemy types while collecting coins.
+### 2. Standalone Python Mini-Games
+#### **Chase Master - Enhanced Edition (`chasing_game_enhanced.py`)**
+- **Objective**: Avoid diverse enemy types while collecting coins in a Pygame environment.
 - **Advanced Mechanics**: 
     - **Multiple Enemy Types**: Trackers, Tanks, Ghosts, and Bouncers.
-    - **Power-up System**: Shields, Invincibility, Teleportation, and 2x Coin multipliers.
+    - **Power-up System**: Shields, Invincibility, Teleportation, and multipliers.
     - **Sound Engine**: Procedural sound generation for immersive feedback.
-    - **Save System**: Local JSON-based high score tracking.
+    - **Save System**: Local JSON-based high score tracking (`chase_master_save.json`).
 
 ---
 
-## Non-Functional Requirements
-
-| Category | Specification |
-| :--- | :--- |
-| **Performance** | Pygame modules run at a stable 60 FPS; Web dashboard loads in <1s. |
-| **Scalability** | Modular structure allows adding new `.py` or `.html` games with minimal config. |
-| **Usability** | Unified control schemes (WASD/Arrows) and glassmorphic UI for premium feel. |
-| **Reliability** | Local JSON and localStorage fallbacks ensure game data is never lost during crashes. |
-| **Portability** | Cross-platform compatibility (Windows/macOS/Linux) via Python and Web Standards. |
+## Recent Updates & Fixes
+- **Robust Web Inputs**: Re-engineered keyboard event listeners bound to the `window` to prevent focus loss in IDEs and iframes.
+- **On-Screen D-Pad**: Added an interactive mobile-friendly directional pad to `index.html` for Chase Master, ensuring movement works regardless of keyboard environment.
+- **Custom Game Logos**: The web dashboard now pulls visually distinct game logos directly from the `assets/` folder.
 
 ---
 
 ## Project Structure
-```
+```text
 Ai/
 ├── .venv/                     # Python Virtual Environment
-├── .gitignore                 # Version control exclusions
-├── chasing_game_enhanced.py   # Main Pygame module
-├── game_platform_hub.html     # Web Dashboard & HTML Games
-├── game_platform_hub.py       # Integrated Hub Logic
-├── memory-card-game.html      # Standalone Memory Game
+├── assets/                    # Image assets (banner.png, chase-logo.png, etc.)
+├── chasing_game_enhanced.py   # Advanced standalone Pygame module
+├── game_platform_hub.py       # Integrated Python Hub Logic
+├── index.html                 # Main NEXUS ARCADE Web Platform (Start Here)
+├── memory-card-game.html      # Standalone HTML Memory Game
+├── write_html.py              # Utility script for HTML generation
 └── README.md                  # Documentation
 ```
 
@@ -58,11 +51,12 @@ Ai/
 
 ## Setup & Installation
 
-### 1. Prerequisites
-- **Python 3.10+** (Optimized for 3.14)
-- **Git**
+### 1. Web Arcade (Recommended)
+Simply open `index.html` in any modern web browser (Chrome, Firefox, Edge). No installation required!
+- **Controls**: Use `WASD` or `Arrow Keys` (or the on-screen D-Pad) to move. Use `Shift` to sprint.
 
-### 2. Running the Python Games
+### 2. Python Standalone Games
+- **Prerequisites**: Python 3.10+, Git.
 ```powershell
 # Navigate to project
 cd Ai
@@ -74,19 +68,11 @@ python -m venv .venv
 # Install Dependencies
 pip install pygame-ce numpy
 
-# Launch Game
+# Launch Python Games
 python chasing_game_enhanced.py
+# OR
+python game_platform_hub.py
 ```
-
-### 3. Running the Dashboard
-Simply open `game_platform_hub.html` in any modern web browser (Chrome, Firefox, Edge).
-
----
-
-## Controls
-- **Move**: `Arrow Keys` or `WASD`
-- **Select/Restart**: `SPACE`
-- **Pause/Menu**: `ESC`
 
 ---
 
