@@ -6,6 +6,7 @@ A comprehensive, dual-engine gaming platform combining a sleek web-based arcade 
 **NEXUS ARCADE** is a hybrid application. It utilizes a modern, gritty neon HTML/CSS/JS dashboard (`index.html`) for high-level interaction, game launching, and web-based gameplay, while leveraging Pygame for high-performance 2D standalone gaming experiences.
 
 ---
+NOTE : "The icons in the top right are not functional , because it is a future scope and there is no Login page for this platform because it is a open source game application for users to play and enjoy."
 
 ## Functional Structure
 
